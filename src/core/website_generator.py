@@ -81,17 +81,18 @@ class WebsiteGenerator:
                     lead.get('company_name', '')
                 )
 
-            # Extract personalization data
+            # Extract personalization data (handle pandas NaN)
+            import math
             demo_data[lead_id] = {
-                'company_name': lead.get('company_name', 'Your Business'),
-                'niche': lead.get('niche', 'default'),
-                'industry': lead.get('industry', 'business'),
-                'location': self._extract_location(lead.get('address', '')),
-                'phone': lead.get('phone', ''),
-                'email': lead.get('email', ''),
-                'website': lead.get('website', ''),
-                'tier': lead.get('tier', 'tier3'),
-                'score': lead.get('score', 0),
+                'company_name': str(lead.get('company_name', 'Your Business')) if lead.get('company_name') and not (isinstance(lead.get('company_name'), float) and math.isnan(lead.get('company_name'))) else 'Your Business',
+                'niche': str(lead.get('niche', 'default')),
+                'industry': str(lead.get('industry', 'business')) if lead.get('industry') and not (isinstance(lead.get('industry'), float) and math.isnan(lead.get('industry'))) else 'business',
+                'location': self._extract_location(str(lead.get('address', '')) if lead.get('address') else ''),
+                'phone': str(lead.get('phone', '')) if lead.get('phone') and not (isinstance(lead.get('phone'), float) and math.isnan(lead.get('phone'))) else '',
+                'email': str(lead.get('email', '')) if lead.get('email') and not (isinstance(lead.get('email'), float) and math.isnan(lead.get('email'))) else '',
+                'website': str(lead.get('website', '')) if lead.get('website') and not (isinstance(lead.get('website'), float) and math.isnan(lead.get('website'))) else '',
+                'tier': str(lead.get('tier', 'tier3')),
+                'score': int(lead.get('score', 0)),
                 'generated_at': self._get_timestamp()
             }
 

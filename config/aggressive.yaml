@@ -1,0 +1,234 @@
+# ============================================================================
+# AGGRESSIVE SENDING SCHEDULE - DECEMBER 24TH DEADLINE
+# ============================================================================
+# WARNING: This is an ACCELERATED warm-up for time-sensitive campaigns.
+# Higher risk of spam filtering, but necessary for tight deadlines.
+# ============================================================================
+
+# SYSTEM SETTINGS
+system:
+  version: "2.0.0"
+  mode: "aggressive"  # Changed from "production"
+  debug: false
+  log_level: "INFO"
+
+# LEAD PROCESSING (same as production)
+lead_processing:
+  tiers:
+    tier1_min: 80  # LOWERED from 85 to get more Tier 1 leads
+    tier2_min: 65  # LOWERED from 70
+    tier3_min: 55  # LOWERED from 60
+
+  batch_size: 2000  # Process 2k at a time
+  max_workers: 50   # Faster processing
+
+  auto_reject:
+    government: true
+    large_corp_min_employees: 50
+    recently_redesigned_months: 24
+    permanently_closed: true
+
+# NICHE DETECTION (same as production - keeping from config/production.yaml)
+niches:
+  detection:
+    restaurant:
+      keywords: [restaurace, restaurant, pizzerie, bistro, fastfood]
+      template: restaurant
+      priority_multiplier: 1.2
+    hotel:
+      keywords: [hotel, penzion, ubytování, accommodation, hostel]
+      template: hotel
+      priority_multiplier: 1.15
+    cafe:
+      keywords: [kavárna, café, cafe, cukrárna, coffee]
+      template: cafe
+      priority_multiplier: 1.2
+    salon:
+      keywords: [kadeřnictví, salon, barber, holič, beauty, kosmetika]
+      template: salon
+      priority_multiplier: 1.1
+    fitness:
+      keywords: [fitness, gym, posilovna, yoga, jóga]
+      template: fitness
+      priority_multiplier: 1.0
+    retail:
+      keywords: [obchod, boutique, butik, shop, prodejna]
+      template: retail
+      priority_multiplier: 0.9
+    professional:
+      keywords: [lawyer, advokát, účetní, architect, consultant]
+      template: professional
+      priority_multiplier: 0.8
+    default:
+      keywords: []
+      template: default
+      priority_multiplier: 1.0
+
+# WEBSITE GENERATION (same as production)
+website_generation:
+  templates:
+    base_path: "src/templates/"
+    personalization:
+      company_name: true
+      location: true
+      industry_specific: true
+      color_scheme: true
+      images: false
+  rendering:
+    mode: "dynamic"
+    base_url: "https://tomaszitko.cz/demo/"
+    url_format: "?lead={lead_id}"
+  static:
+    enabled: false
+    cleanup_days: 7
+
+# HOSTING (same as production)
+hosting:
+  provider: "cloudflare_pages"
+  cloudflare:
+    account_id: ""
+    project_name: "cold-email-demos"
+    api_token: ""
+    custom_domain: "tomaszitko.cz"
+    auto_cleanup: true
+    cleanup_days: 7
+
+# EMAIL ORCHESTRATION - AGGRESSIVE SCHEDULE
+email:
+  smtp:
+    host: ""  # SMTP_HOST env var
+    port: 587
+    use_tls: true
+    username: ""  # SMTP_USER env var
+    password: ""  # SMTP_PASSWORD env var
+    from_email: "info@tomaszitko.cz"
+    from_name: "Tomáš Žitko"
+
+  sending:
+    # AGGRESSIVE warm-up for December 24th deadline
+    warmup:
+      enabled: true
+      schedule:
+        day_1_3: 50      # Days 1-3: 50/day (faster start)
+        day_4_7: 100     # Days 4-7: 100/day
+        day_8_14: 200    # Days 8-14: 200/day
+        day_15_plus: 400 # Days 15+: 400/day (AGGRESSIVE)
+
+    # Faster rate limiting (still safe)
+    rate_limit:
+      emails_per_hour: 50  # Up from 30
+      delay_between_emails_seconds: 90  # 1.5 minutes (down from 2 min)
+      randomize_delay: true
+      randomize_range_seconds: 45  # +/- 45s
+
+    # HIGHER batch limits per tier
+    batches:
+      tier1_daily_limit: 30   # Up from 10 (personalized demos)
+      tier2_daily_limit: 100  # Up from 30 (mockups)
+      tier3_daily_limit: 200  # Up from 60 (portfolio)
+
+    retry:
+      max_attempts: 3
+      backoff_multiplier: 2
+
+  templates:
+    base_path: "src/email_templates/"
+    tier1: "tier1_personalized_demo.txt"
+    tier2: "tier2_mockup_portfolio.txt"
+    tier3: "tier3_portfolio.txt"
+
+  personalization:
+    company_name: true
+    industry_specific: true
+    website_issues: true
+    local_references: true
+
+# COMPLIANCE (stricter to maintain reputation)
+compliance:
+  unsubscribe:
+    enabled: true
+    link_format: "https://tomaszitko.cz/unsubscribe?id={lead_id}"
+    list_file: "data/compliance/unsubscribe_list.json"
+  gdpr:
+    enabled: true
+    data_retention_days: 365
+    export_format: "json"
+  bounce:
+    enabled: true
+    max_bounces: 1  # STRICTER - blacklist after 1 bounce (protect reputation)
+    blacklist_file: "data/compliance/bounce_blacklist.json"
+  spam:
+    enabled: true
+    complaint_file: "data/compliance/spam_complaints.json"
+    auto_blacklist: true
+
+# ANALYTICS (same as production)
+analytics:
+  tracking:
+    enabled: true
+    track_opens: true
+    track_clicks: true
+    track_demo_views: true
+    track_time_on_page: true
+  storage:
+    database_file: "data/analytics/tracking.db"
+    format: "sqlite"
+  reporting:
+    enabled: true
+    daily_summary: true
+    weekly_report: true
+    output_dir: "data/analytics/reports/"
+  metrics:
+    - open_rate
+    - click_rate
+    - demo_view_rate
+    - reply_rate
+    - conversion_rate
+    - time_to_reply
+    - best_performing_tier
+    - best_performing_niche
+
+# LOGGING
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  files:
+    main: "logs/system.log"
+    errors: "logs/errors.log"
+    analytics: "logs/analytics.log"
+    email_sent: "logs/emails_sent.log"
+  rotation:
+    max_bytes: 10485760
+    backup_count: 5
+
+# DATA PATHS
+paths:
+  input:
+    leads: "data/leads/input/"
+    templates: "src/templates/"
+    email_templates: "src/email_templates/"
+  output:
+    processed_leads: "data/leads/processed/"
+    generated_sites: "data/generated_sites/"
+    emails_queue: "data/emails/queue/"
+    emails_sent: "data/emails/sent/"
+  cache:
+    website_analysis: "data/cache/website_analysis.json"
+    lead_scores: "data/cache/lead_scores.json"
+  compliance:
+    unsubscribe: "data/compliance/unsubscribe_list.json"
+    bounces: "data/compliance/bounce_blacklist.json"
+    spam: "data/compliance/spam_complaints.json"
+
+# PERFORMANCE
+performance:
+  cache:
+    enabled: true
+    ttl_days: 7
+  threading:
+    enabled: true
+    max_workers: 50  # Increased for speed
+  timeouts:
+    website_check_seconds: 10
+    email_send_seconds: 30
+    api_call_seconds: 15
