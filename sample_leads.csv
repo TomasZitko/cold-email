@@ -1,0 +1,11 @@
+company_name,email,phone,website,industry,address,registration_date,employees
+"Kavárna U Tří Koček",info@utrikocek.cz,+420777123456,,kavárna,"Hlavní 25, 110 00 Praha 1",2024-03-15,5
+"Restaurant Mario",mario@restaurant.cz,+420555444333,mario-restaurant.cz,restaurace,"Plzeňská 89, 150 00 Praha 5",2010-05-20,15
+"Salon Bella",bella@salon.cz,+420666777888,,kadeřnictví,"Vodičkova 12, 110 00 Praha 1",2023-01-10,3
+"Hotel Paradise",info@hotelparadise.cz,+420777999000,hotelparadise.cz,hotel,"Václavské náměstí 1, 110 00 Praha 1",2005-06-15,45
+"Fitness Studio Max",max@fitness.cz,+420555111222,,fitness,"Na Příkopě 5, 110 00 Praha 1",2022-09-01,8
+"Bistro Corner",corner@bistro.cz,+420444333222,bistro-old-site.cz,bistro,"Karlova 10, 110 00 Praha 1",2015-03-20,6
+"Café Relax",,,cafe-relax.cz,kavárna,"Masarykovo nám. 15, 120 00 Praha 2",2024-01-05,4
+"Advokátní kancelář Smith",smith@law.cz,+420222111000,smithlaw.cz,právní služby,"Jindřišská 25, 110 00 Praha 1",2008-04-12,12
+"Ministerstvo financí",,,mf.gov.cz,government,"Letenská 15, 110 00 Praha 1",1990-01-01,500
+"Malý Salon",info@malysalon.cz,+420333444555,,kadeřnictví,"Husova 3, 110 00 Praha 1",2024-06-01,2

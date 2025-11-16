@@ -1,0 +1,25 @@
+SUBJECT: Moderní web pro {{ company_name }} - Ukázka designu
+
+BODY: Dobrý den,
+
+Jmenuji se {{ your_name }} a pomáhám firmám jako {{ company_name }} v {{ location }} získat moderní webovou prezentaci, která skutečně prodává.
+
+Specializuji se na váš obor ({{ industry }}) a vytvořil jsem již desítky úspěšných webů pro podobné firmy.
+
+Co vám mohu nabídnout:
+✓ Moderní, responzivní design
+✓ Rychlé načítání (důležité pro Google)
+✓ Optimalizace pro vyhledávače (SEO)
+✓ Integrace rezervačního systému / kontaktního formuláře
+✓ Správa obsahu - sami můžete upravovat
+
+Můžu vám ukázat některé mé práce a vytvořit návrh speciálně pro {{ company_name }}.
+
+Máte zájem o nezávaznou schůzku nebo videohovor?
+
+S pozdravem,
+{{ your_name }}
+{{ your_email }}
+
+---
+Odhlásit se z dalších zpráv: {{ unsubscribe_url }}

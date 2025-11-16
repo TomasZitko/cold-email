@@ -1,0 +1,24 @@
+SUBJECT: {{ company_name }} - Vytvořil jsem vám demo webu zdarma
+
+BODY: Dobrý den,
+
+Jmenuji se {{ your_name }} a věnuji se tvorbě moderních webových stránek pro firmy v {{ location }}.
+
+Všiml jsem si vaší společnosti {{ company_name }} a rozhodl jsem se pro vás vytvořit ZDARMA demo moderní webové prezentace, abych vám ukázal, jak by váš byznys mohl vypadat online.
+
+👉 Podívejte se na demo zde: {{ demo_url }}
+
+Toto demo jsem vytvořil speciálně pro vás během několika hodin. Je plně responzivní (funguje na telefonech, tabletech i počítačích) a optimalizované pro rychlost.
+
+Pokud se vám líbí, rád bych s vámi projednal, jak bychom mohli vytvořit kompletní řešení přesně podle vašich potřeb.
+
+Nejste ničím zavázáni - demo jsem vytvořil pouze proto, abych vám ukázal potenciál moderního webu pro {{ company_name }}.
+
+Můžeme si zavolat tento nebo příští týden?
+
+S pozdravem,
+{{ your_name }}
+{{ your_email }}
+
+---
+Nechcete dostávat další zprávy? Klikněte zde: {{ unsubscribe_url }}

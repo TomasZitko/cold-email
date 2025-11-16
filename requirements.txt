@@ -1,0 +1,29 @@
+# Cold Email Pro - Production Dependencies
+# ==========================================
+
+# Core dependencies
+pandas>=2.0.0
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# Web scraping and analysis
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+selenium>=4.15.0
+webdriver-manager>=4.0.1
+
+# Email
+jinja2>=3.1.2
+
+# Data validation
+validators>=0.22.0
+
+# Progress bars
+tqdm>=4.66.0
+
+# Excel support
+openpyxl>=3.1.2
+
+# Optional: AI-powered analysis (if needed)
+# google-generativeai>=0.3.0
+# openai>=1.0.0

@@ -1,0 +1,24 @@
+SUBJECT: Webové stránky pro {{ company_name }}?
+
+BODY: Dobrý den,
+
+Jmenuji se {{ your_name }} a pomáhám firmám v České republice s moderními webovými stránkami.
+
+Všiml jsem si vaší společnosti {{ company_name }} a rád bych vám nabídl své služby v oblasti webdesignu a vývoje.
+
+Moje služby zahrnují:
+• Moderní responzivní design
+• SEO optimalizace
+• Rychlé načítání stránek
+• Správa obsahu (CMS)
+• Technická podpora
+
+Pokud máte zájem o nový web nebo modernizaci stávajícího, rád vám připravím cenovou nabídku.
+
+Odpovězte na tento email nebo mě kontaktujte na {{ your_email }}.
+
+S pozdravem,
+{{ your_name }}
+
+---
+Odhlásit: {{ unsubscribe_url }}
