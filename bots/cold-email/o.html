@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Supply - Autonomous AI Agents</title>
+
+    <!-- 
+      THE FONT SYSTEM
+      - Playfair Display: An elegant, high-contrast serif for all headlines.
+      - Inter: A clean, highly readable sans-serif for body, UI, and eyeliners.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* --- 
+          DESIGN SYSTEM
+          Based on the provided screenshots.
+        --- */
+        :root {
+            /* Palette */
+            --color-dark-navy: #0D1A26;
+            --color-light-white: #FFFFFF;
+            --color-text-light: #F0F4F8;
+            --color-text-dark: #111111;
+            --color-text-muted-light: #BCC8D4;
+            --color-text-muted-dark: #555555;
+            
+            /* Lines */
+            --line-dark: #223344;
+            --line-light: #E5E7EB;
+
+            /* Fonts */
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* Transitions */
+            --transition-ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* --- 1. BASE & RESET --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--color-dark-navy);
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text-light);
+            background-color: var(--color-dark-navy);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* --- 2. GLOBAL STYLES & UTILITIES --- */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 8rem 0;
+            overflow: hidden;
+        }
+        .section-light {
+            background-color: var(--color-light-white);
+            color: var(--color-text-dark);
+        }
+
+        /* Eyeliner text (e.g., "BENEFITS") */
+        .eyeliner {
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: var(--color-text-muted-dark);
+        }
+        .section-light .eyeliner { color: var(--color-text-muted-dark); }
+        .eyeliner-dark { color: var(--color-text-muted-light); }
+
+        /* Main headline styles */
+        .headline-1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--color-text-light);
+            margin-bottom: 2rem;
+        }
+        .section-light .headline-1 {
+            color: var(--color-text-dark);
+        }
+        
+        .headline-2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            line-height: 1.25;
+            color: var(--color-text-dark);
+        }
+
+        .body-text {
+            font-size: 1.125rem;
+            font-weight: 300;
+            line-height: 1.8;
+            color: var(--color-text-muted-light);
+            max-width: 60ch;
+        }
+        .section-light .body-text {
+            color: var(--color-text-muted-dark);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+            padding: 0.8rem 1.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s var(--transition-ease);
+            border: 1px solid transparent;
+        }
+        .btn-primary {
+            background-color: var(--color-light-white);
+            color: var(--color-text-dark);
+            border-color: var(--color-light-white);
+        }
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--color-light-white);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-text-light);
+            border-color: var(--line-dark);
+        }
+        .btn-secondary:hover {
+            background-color: var(--color-light-white);
+            color: var(--color-text-dark);
+            border-color: var(--color-light-white);
+        }
+        
+        .btn-dark {
+            background-color: var(--color-text-dark);
+            color: var(--color-light-white);
+            border-color: var(--color-text-dark);
+        }
+        .btn-dark:hover {
+            background-color: #333;
+            border-color: #333;
+        }
+
+        /* GSAP Animation Class */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s var(--transition-ease), transform 0.8s var(--transition-ease);
+        }
+        
+        /* --- 3. HEADER --- */
+        .header {
+            width: 100%;
+            padding: 2rem 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-body);
+            font-weight: 500;
+            font-size: 1.125rem;
+            color: var(--color-light-white);
+            text-decoration: none;
+        }
+        .header-logo svg {
+            width: 24px;
+            height: 24px;
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-links a {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--color-text-muted-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--color-light-white);
+        }
+        
+        /* --- 4. HERO SECTION --- */
+        #hero {
+            padding-top: 14rem;
+            padding-bottom: 8rem;
+            text-align: center;
+            position: relative;
+        }
+        #hero .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #hero .eyeliner {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-text-muted-light);
+            background-color: rgba(34, 51, 68, 0.5); /* #223344 with 50% opacity */
+            border: 1px solid var(--line-dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+        }
+        #hero .eyeliner svg { width: 14px; height: 14px; }
+        
+        #hero .headline-1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            max-width: 20ch;
+            margin-bottom: 1.5rem;
+        }
+        
+        #hero .body-text {
+            font-size: 1.25rem;
+            max-width: 55ch;
+            margin-bottom: 2.5rem;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        /* Logo Scroller (Marquee) */
+        .logo-scroller {
+            width: 100%;
+            overflow: hidden;
+            position: absolute;
+            bottom: 4rem;
+            left: 0;
+            mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+        }
+        .scroller-inner {
+            display: flex;
+            gap: 4rem;
+            width: max-content;
+            animation: scroll 40s linear infinite;
+        }
+        .logo-scroller span {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--color-text-muted-light);
+            opacity: 0.5;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- 5. FEATURES SECTION --- */
+        #features .container {
+            display: flex;
+            flex-direction: column;
+            gap: 8rem;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+        .feature-image {
+            background-color: #FAFAFA;
+            border: 1px solid var(--line-light);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+        .feature-image img {
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        /* --- 6. PROCESS SECTION --- */
+        #process .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #process .headline-1 {
+            text-align: center;
+            max-width: 20ch;
+        }
+        
+        .tabs-nav {
+            display: flex;
+            gap: 2rem;
+            border-bottom: 1px solid var(--line-light);
+            margin-bottom: 4rem;
+        }
+        .tab-btn {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-text-muted-dark);
+            background: none;
+            border: none;
+            padding: 1rem 0.5rem;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--color-text-dark);
+            transform: scaleX(0);
+            transition: transform 0.4s var(--transition-ease);
+        }
+        .tab-btn.active {
+            color: var(--color-text-dark);
+        }
+        .tab-btn.active::after {
+            transform: scaleX(1);
+        }
+        
+        .tab-content {
+            width: 100%;
+            display: none; /* Hidden by default */
+        }
+        .tab-content.active {
+            display: block; /* Shown when active */
+        }
+        .tab-content .feature-grid {
+            align-items: flex-start;
+        }
+        
+        .tab-content-text h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        .tab-content-text h2 {
+            margin-bottom: 1.5rem;
+        }
+        .tab-content-text .body-text {
+            margin-bottom: 2rem;
+        }
+        .trusted-by {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--color-text-muted-dark);
+        }
+        .trusted-avatars { display: flex; }
+        .trusted-avatars img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--color-light-white);
+            margin-left: -8px;
+        }
+        .trusted-avatars img:first-child { margin-left: 0; }
+
+        /* --- 7. CALCULATOR SECTION --- */
+        #calculator .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .calculator-wrapper {
+            background-color: #FAFAFA;
+            border: 1px solid var(--line-light);
+            border-radius: 12px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 800px;
+            text-align: left;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+        }
+        .slider-group {
+            margin-bottom: 2rem;
+        }
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .slider-header label {
+            font-family: var(--font-body);
+            font-weight: 500;
+        }
+        .slider-header span {
+            font-family: var(--font-body);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        .slider-group p {
+            font-size: 0.9rem;
+            color: var(--color-text-muted-dark);
+            margin-top: 0.75rem;
+        }
+        
+        /* Custom Slider Styles */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            background: var(--line-light);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--color-text-dark);
+            border-radius: 50%;
+            border: 3px solid var(--color-light-white);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        input[type="range"]:active::-webkit-slider-thumb {
+            transform: scale(1.2);
+        }
+        
+        .calculator-results {
+            border-top: 1px solid var(--line-light);
+            padding-top: 2rem;
+            margin-top: 3rem;
+        }
+        .calculator-results h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .calculator-results p {
+            color: var(--color-text-muted-dark);
+            margin-bottom: 2rem;
+        }
+
+        /* --- 8. INDUSTRIES SECTION --- */
+        #industries .feature-grid {
+            align-items: flex-start;
+        }
+        .industries-image {
+            background-color: #FAFAFA;
+            border: 1px solid var(--line-light);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+        
+        /* Accordion */
+        .accordion-item {
+            border-bottom: 1px solid var(--line-light);
+        }
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            cursor: pointer;
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+        }
+        .accordion-header h3 {
+            font-family: var(--font-body);
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--color-text-muted-dark);
+            transition: color 0.3s ease;
+        }
+        .accordion-icon {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--color-text-muted-dark);
+            transition: transform 0.4s var(--transition-ease);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s var(--transition-ease), padding 0.5s var(--transition-ease);
+        }
+        .accordion-content p {
+            padding-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--color-text-muted-dark);
+            max-width: 60ch;
+        }
+        
+        /* Active Accordion State */
+        .accordion-item.active .accordion-header h3 {
+            color: var(--color-text-dark);
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(45deg);
+        }
+        
+        #industries .btn-dark {
+            margin-top: 2rem;
+        }
+
+        /* --- 9. BENEFITS SECTION --- */
+        #benefits .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: left;
+            margin-top: 4rem;
+        }
+        .benefit-item .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background-color: var(--color-dark-navy);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .benefit-item .icon-wrapper svg {
+            width: 24px;
+            height: 24px;
+            color: var(--color-light-white);
+        }
+        .benefit-item h3 {
+            font-family: var(--font-body);
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .benefit-item p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--color-text-muted-dark);
+        }
+
+        /* --- 10. COMPARE SECTION --- */
+        #compare .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        #compare .body-text {
+            margin-bottom: 4rem;
+        }
+        .compare-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            max-width: 900px;
+            border: 1px solid var(--line-dark);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #0F1D2B;
+        }
+        .compare-column {
+            padding: 2.5rem;
+            text-align: left;
+        }
+        .compare-column:first-child {
+            border-right: 1px solid var(--line-dark);
+        }
+        .compare-header {
+            font-family: var(--font-body);
+            font-size: 1.25rem;
+            font-weight: 600;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--line-dark);
+        }
+        .compare-header span {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .compare-header svg { width: 24px; height: 24px; }
+        
+        .compare-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .compare-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        .compare-list li svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        .compare-list li.check svg { color: #34D399; }
+        .compare-list li.cross svg { color: #F87171; }
+
+        /* --- 11. TESTIMONIALS SECTION --- */
+        #testimonials .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        #testimonials .headline-1 {
+            margin-bottom: 5rem;
+        }
+        .testimonials-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 100%;
+        }
+        .testimonial-card {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            background-color: #FAFAFA;
+            border: 1px solid var(--line-light);
+            border-radius: 12px;
+            overflow: hidden;
+            text-align: left;
+        }
+        .testimonial-card:nth-child(even) {
+            grid-template-columns: 2fr 1fr;
+        }
+        .testimonial-card:nth-child(even) .testimonial-image {
+            order: 2;
+        }
+        .testimonial-image img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+        .testimonial-content {
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .testimonial-quote {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 500;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+        }
+        .testimonial-author {
+            font-weight: 500;
+            margin-top: 2rem;
+        }
+        .testimonial-author span {
+            display: block;
+            font-weight: 400;
+            font-size: 0.9rem;
+            color: var(--color-text-muted-dark);
+            margin-top: 0.25rem;
+        }
+        .testimonial-stat {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 600;
+            color: var(--color-text-dark);
+        }
+        .testimonial-stat span {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-text-muted-dark);
+            margin-top: 0.5rem;
+        }
+        
+        /* --- 12. FAQ SECTION --- */
+        #faq .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .faq-wrapper {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 4rem;
+        }
+        #faq .accordion-header h3 {
+            font-size: 1.25rem;
+        }
+
+        /* --- 13. FOOTER --- */
+        #footer-cta {
+            padding-top: 8rem;
+            text-align: center;
+        }
+        #footer-cta .container {
+            border-bottom: 1px solid var(--line-dark);
+            padding-bottom: 8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #footer-cta .eyeliner {
+            color: var(--color-text-muted-light);
+        }
+        #footer-cta .headline-1 {
+            max-width: 20ch;
+            margin-bottom: 2.5rem;
+        }
+        #footer-cta .body-text {
+            max-width: 55ch;
+            margin-bottom: 2.5rem;
+        }
+        .footer-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .footer-bottom {
+            padding: 4rem 0 3rem 0;
+        }
+        .footer-bottom .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-copyright {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--color-text-muted-light);
+        }
+        .footer-copyright svg {
+            width: 24px;
+            height: 24px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .footer-links a {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--color-text-muted-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: var(--color-light-white);
+        }
+        .footer-socials {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .footer-socials a {
+            color: var(--color-text-muted-light);
+            transition: color 0.3s ease;
+        }
+        .footer-socials a:hover {
+            color: var(--color-light-white);
+        }
+        .footer-socials svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* --- 14. RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none; /* Hide nav links for simplicity, would be a mobile menu */
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            .feature-grid:nth-child(even) .feature-image {
+                order: -1;
+            }
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                max-width: 450px;
+            }
+            .testimonial-card,
+            .testimonial-card:nth-child(even) {
+                grid-template-columns: 1fr;
+            }
+            .testimonial-content {
+                padding: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .section {
+                padding: 5rem 0;
+            }
+            .header {
+                padding: 1.5rem 0;
+            }
+            .header .container {
+                padding: 0 1.5rem;
+            }
+            .container {
+                padding: 0 1.5rem;
+            }
+            .headline-1 {
+                font-size: 2.5rem;
+            }
+            .hero-buttons, .footer-buttons {
+                flex-direction: column;
+                width: 100%;
+                padding: 0 1.5rem;
+            }
+            .hero-buttons .btn, .footer-buttons .btn {
+                width: 100%;
+                text-align: center;
+            }
+            .logo-scroller {
+                bottom: 2rem;
+            }
+            .scroller-inner {
+                gap: 3rem;
+            }
+            .tabs-nav {
+                gap: 1rem;
+            }
+            .tab-btn {
+                font-size: 0.9rem;
+            }
+            .calculator-wrapper {
+                padding: 2rem;
+            }
+            .compare-table {
+                grid-template-columns: 1fr;
+            }
+            .compare-column:first-child {
+                border-right: none;
+                border-bottom: 1px solid var(--line-dark);
+            }
+            .testimonial-quote {
+                font-size: 1.25rem;
+            }
+            .footer-bottom .container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .footer-links {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --- HEADER --- -->
+    <header class="header">
+        <div class="container">
+            <a href="#hero" class="header-logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M2 7L12 12M12 12L22 7M12 12V22M17 4.5L7 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>AI Supply</span>
+            </a>
+            <nav class="header-nav">
+                <div class="nav-links">
+                    <a href="#features">Use cases</a>
+                    <a href="#process">About</a>
+                    <a href="#industries">Careers</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <a href="#" class="btn btn-primary">Get started</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- --- HERO SECTION --- -->
+        <section id="hero">
+            <div class="container reveal-up">
+                <div class="eyeliner">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M2 7L12 12M12 12L22 7M12 12V22M17 4.5L7 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Introducing AI Supply
+                </div>
+                <h1 class="headline-1">Reimagine work with autonomous AI agents</h1>
+                <p class="body-text">
+                    Your on-demand AI workforce. Automate routine tasks, streamline decision-making, and free your team to focus on what matters most.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">Get in touch</a>
+                    <a href="#" class="btn btn-secondary">View use cases</a>
+                </div>
+            </div>
+            <div class="logo-scroller">
+                <div class="scroller-inner">
+                    <!-- Duplicate for seamless loop -->
+                    <span>Cloudly</span><span>Techlify</span><span>Apply</span><span>Software</span><span>Startup</span><span>Camera</span><span>Cloudly</span><span>Techlify</span><span>Apply</span><span>Software</span><span>Startup</span><span>Camera</span>
+                    <span>Cloudly</span><span>Techlify</span><span>Apply</span><span>Software</span><span>Startup</span><span>Camera</span><span>Cloudly</span><span>Techlify</span><span>Apply</span><span>Software</span><span>Startup</span><span>Camera</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- --- FEATURES SECTION --- -->
+        <section id="features" class="section section-light">
+            <div class="container">
+
+                <div class="feature-grid reveal-up">
+                    <div class="feature-text">
+                        <h2 class="headline-2">Unify and Analyze All Your Data</h2>
+                        <p class="body-text">
+                            Connect internal docs, third-party tools, and real-time inputs into a single intelligent interface. Let AI surface insights that drive smarter, more confident business decisions.
+                        </p>
+                    </div>
+                    <div class="feature-image">
+                        <img src="https://i.imgur.com/8Q8Y3fC.png" alt="Data analysis dashboard with donut chart">
+                    </div>
+                </div>
+
+                <div class="feature-grid reveal-up">
+                    <div class="feature-image">
+                        <img src="https://i.imgur.com/r3A4h0G.png" alt="Table UI showing automation workflows">
+                    </div>
+                    <div class="feature-text">
+                        <h2 class="headline-2">Automate High-Frequency Workflows</h2>
+                        <p class="body-text">
+                            AI Supply agents break down complex tasks into clear, traceable steps. Eliminate repetitive work and scale your team's output with unmatched efficiency and precision.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="feature-grid reveal-up">
+                    <div class="feature-text">
+                        <h2 class="headline-2">Accelerate Execution with Reliable Autonomy</h2>
+                        <p class="body-text">
+                            Our agents don't just assist — they complete tasks end-to-end with accountability and speed. Track progress, refine outputs, and get results faster.
+                        </p>
+                        <div style="display: flex; align-items: center; gap: 1.5rem; margin-top: 2rem;">
+                            <a href="#" class="btn btn-dark">View use cases</a>
+                            <div class="trusted-by">
+                                <div class="trusted-avatars">
+                                    <img src="https://placehold.co/40x40/E2E8F0/A0AEC0" alt="Avatar 1">
+                                    <img src="https://placehold.co/40x40/CBD5E0/718096" alt="Avatar 2">
+                                    <img src="https://placehold.co/40x40/BEE3F8/63B3ED" alt="Avatar 3">
+                                </div>
+                                <span>Trusted by <strong>300+</strong> clients</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature-image">
+                        <img src="https://i.imgur.com/yv8kI2C.png" alt="Graph showing upward trend line">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- --- PROCESS SECTION --- -->
+        <section id="process" class="section section-light">
+            <div class="container reveal-up">
+                <span class="eyeliner">Process</span>
+                <h1 class="headline-1">Empower your growth with AI-driven solutions</h1>
+
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-tab="discovery">Discovery</button>
+                    <button class="tab-btn" data-tab="develop">Develop</button>
+                    <button class="tab-btn" data-tab="optimize">Optimize</button>
+                </div>
+
+                <!-- Tab 1: Discovery -->
+                <div class="tab-content active" id="discovery">
+                    <div class="feature-grid">
+                        <div class="feature-image" style="background-color: #F4F6F8;">
+                            <img src="https://i.imgur.com/4W2m4R0.png" alt="Workflow diagram for payment processing">
+                        </div>
+                        <div class="tab-content-text">
+                            <h3>01 – DISCOVERY</h3>
+                            <h2 class="headline-2">Uncover Automation Opportunities</h2>
+                            <p class="body-text">
+                                We start by analyzing your current workflows, tools, and communication patterns to identify where AI can create the most impact. From customer-facing touchpoints to internal bottlenecks, we surface high-leverage use cases that deliver real results—fast.
+                            </p>
+                            <a href="#" class="btn btn-dark">Get in touch</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Develop (Mock Content) -->
+                <div class="tab-content" id="develop">
+                    <div class="feature-grid">
+                        <div class="feature-image" style="background-color: #F4F6F8;">
+                            <img src="https://placehold.co/600x450/F4F6F8/CBD5E0?text=Develop+Process" alt="Development process diagram">
+                        </div>
+                        <div class="tab-content-text">
+                            <h3>02 – DEVELOP</h3>
+                            <h2 class="headline-2">Build & Train Your AI Agents</h2>
+                            <p class="body-text">
+                                Our team configures and trains your autonomous agents, securely connecting them to your data sources and third-party apps. We run rigorous tests to ensure reliability and accuracy before any agent goes live.
+                            </p>
+                            <a href="#" class="btn btn-dark">Get in touch</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Optimize (Mock Content) -->
+                <div class="tab-content" id="optimize">
+                    <div class="feature-grid">
+                        <div class="feature-image" style="background-color: #F4F6F8;">
+                            <img src="https://placehold.co/600x450/F4F6F8/CBD5E0?text=Optimize+Metrics" alt="Optimization metrics dashboard">
+                        </div>
+                        <div class="tab-content-text">
+                            <h3>03 – OPTIMIZE</h3>
+                            <h2 class="headline-2">Scale & Refine Performance</h2>
+                            <p class="body-text">
+                                We don't just deploy and disappear. We monitor agent performance, gather team feedback, and continuously refine the models. As your business evolves, your AI workforce evolves with you.
+                            </p>
+                            <a href="#" class="btn btn-dark">Get in touch</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- --- CALCULATOR SECTION --- -->
+        <section id="calculator" class="section section-light">
+            <div class="container reveal-up">
+                <span class="eyeliner">Calculator</span>
+                <h1 class="headline-1" style="text-align: center;">Quantify the cost of not automating</h1>
+
+                <div class="calculator-wrapper" style="margin-top: 4rem;">
+                    <div class="slider-group">
+                        <div class="slider-header">
+                            <label for="team-size">Team size</label>
+                            <span id="team-size-value">25</span>
+                        </div>
+                        <input type="range" id="team-size" min="1" max="500" value="25">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-header">
+                            <label for="hours">Hours</label>
+                            <span id="hours-value">20</span>
+                        </div>
+                        <input type="range" id="hours" min="1" max="40" value="20">
+                        <p>How many hours per week each team member spends on manual tasks (estimated).</p>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-header">
+                            <label for="cost">Avg. hourly cost of team member</label>
+                            <span id="cost-value">$ 250</span>
+                        </div>
+                        <input type="range" id="cost" min="20" max="500" value="250">
+                    </div>
+
+                    <div class="calculator-results">
+                        <h2 id="results-heading">You're losing ~2165 hours/month to repetitive tasks. That's $541,250/month in time costs.</h2>
+                        <p id="results-subheading">AI Supply could reclaim 80% of that — saving ~$433,000/month.</p>
+                        <a href="#" class="btn btn-dark">Get a custom automation plan</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- --- INDUSTRIES SECTION --- -->
+        <section id="industries" class="section section-light">
+            <div class="container reveal-up">
+                <div class="feature-grid">
+                    <div class="industries-image">
+                        <img src="https://i.imgur.com/rS1yZlK.png" alt="Industry tags collage">
+                    </div>
+                    <div class="industries-content">
+                        <span class="eyeliner">Industries</span>
+                        <h2 class="headline-1" style="font-size: clamp(2.5rem, 5vw, 4rem);">Built for the real world. Across every industry.</h2>
+                        
+                        <div class="accordion-wrapper" style="margin-top: 2rem;">
+                            <div class="accordion-item active">
+                                <button class="accordion-header">
+                                    <h3>Finance</h3>
+                                    <span class="accordion-icon">+</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p>AI agents generate reports, track market trends, and streamline compliance — all with verifiable audit trails for complete transparency.</p>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <button class="accordion-header">
+                                    <h3>E-commerce</h3>
+                                    <span class="accordion-icon">+</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p>Automate inventory management, personalize customer support, and optimize supply chains to reduce costs and increase sales.</p>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <button class="accordion-header">
+                                    <h3>Healthcare</h3>
+                                    <span class="accordion-icon">+</span>
+                                </button>
+                                <div class="accordion-content">
+                                    <p>Streamline patient intake, manage scheduling, and assist with medical billing, freeing up your staff to focus on patient care.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="btn btn-dark">View use cases</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- --- BENEFITS SECTION --- -->
+        <section id="benefits" class="section section-light">
+            <div class="container reveal-up">
+                <span class="eyeliner">Benefits</span>
+                <h1 class="headline-1">Let your team focus on what matters most</h1>
+
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="icon-wrapper">
+                            <!-- SVG: Trend Up -->
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" /></svg>
+                        </div>
+                        <h3>Increased efficiency</h3>
+                        <p>AI agents handle tasks instantly, speeding up delivery across workflows.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="icon-wrapper">
+                            <!-- SVG: Dollar -->
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.825-1.106-2.156 0-2.981.556-.413 1.258-.62 2.003-.62.725 0 1.45.22 2.003.659 1.106.825 1.106 2.156 0 2.981C13.536 11.219 12.768 11.4 12 11.4c-.725 0-1.45-.22-2.003-.659-1.106-.825-1.106-2.156 0-2.981.556-.413 1.258-.62 2.003-.62" /></svg>
+                        </div>
+                        <h3>Lower Operational Costs</h3>
+                        <p>Automate repetitive work and scale operations without scaling your headcount.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="icon-wrapper">
+                            <!-- SVG: Chart Bar -->
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625C9.75 8.004 10.254 7.5 10.875 7.5h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 9.75 19.875V8.625ZM16.5 4.125C16.5 3.504 17.004 3 17.625 3h2.25c.621 0 1.125.504 1.125 1.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 16.5 19.875V4.125Z" /></svg>
+                        </div>
+                        <h3>Smarter Decision-Making</h3>
+                        <p>Turn scattered data into actionable insights with AI-powered analysis.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="icon-wrapper">
+                            <!-- SVG: Arrow Path -->
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.181m0-4.991v4.99" /></svg>
+                        </div>
+                        <h3>24/7 Workflow Continuity</h3>
+                        <p>Run critical processes nonstop — even outside business hours.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="icon-wrapper">
+                            <!-- SVG: Star -->
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.31h5.418a.563.563 0 0 1 .31.95l-4.286 3.118a.563.563 0 0 0-.182.557l1.638 5.011a.563.563 0 0 1-.812.622l-4.123-3.118a.563.563 0 0 0-.666 0l-4.123 3.118a.563.563 0 0 1-.812-.622l1.638-5.011a.563.563 0 0 0-.182-.557l-4.286-3.118a.563.563 0 0 1 .31-.95h5.418a.563.563 0 0 0 .475-.31L11.48 3.5Z" /></svg>
+                        </div>
+                        <h3>Seamless Integration</h3>
+                        <p>Connect with your current tools and systems in minutes, not months.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="icon-wrapper">
+                            <!-- SVG: Shield Check -->
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.333 9-6.03 9-11.623 0-1.614-.424-3.14-1.172-4.523M12 18.75v-5.972c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V18.75m-7.5-6.125a1.125 1.125 0 0 1 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V18.75m-7.5-6.125V18.75m0 0A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.333 9-6.03 9-11.623 0-1.614-.424-3.14-1.172-4.523" /></svg>
+                        </div>
+                        <h3>Enterprise-Grade Security</h3>
+                        <p>Protect sensitive data with encrypted, compliant, and secure AI operations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- --- COMPARE SECTION --- -->
+        <section id="compare" class="section">
+            <div class="container reveal-up">
+                <span class="eyeliner eyeliner-dark">Compare</span>
+                <h1 class="headline-1">Why Choose AI Supply</h1>
+                <p class="body-text">
+                    Stop relying on slow, manual workflows. Let AI Supply automate the heavy lifting so your team can focus on high-impact work.
+                </p>
+
+                <div class="compare-table">
+                    <div class="compare-column">
+                        <h3 class="compare-header">Other agencies</h3>
+                        <ul class="compare-list">
+                            <li class="cross">
+                                <!-- SVG: X Circle -->
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                <span>Manual task delegation</span>
+                            </li>
+                            <li class="cross">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                <span>Limited data usage</span>
+                            </li>
+                            <li class="cross">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                <span>Human error & delay</span>
+                            </li>
+                            <li class="cross">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                <span>Costly scaling</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="compare-column">
+                        <h3 class="compare-header">
+                            <span>
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M2 7L12 12M12 12L22 7M12 12V22M17 4.5L7 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                AI Supply
+                            </span>
+                        </h3>
+                        <ul class="compare-list">
+                            <li class="check">
+                                <!-- SVG: Check Circle -->
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                <span>End-to-end task automation</span>
+                            </li>
+                            <li class="check">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                <span>Unified analysis across all data</span>
+                            </li>
+                            <li class="check">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                <span>Reliable, always-on AI agents</span>
+                            </li>
+                            <li class="check">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                <span>Scales without adding headcount</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- --- TESTIMONIALS SECTION --- -->
+        <section id="testimonials" class="section section-light">
+            <div class="container reveal-up">
+                <span class="eyeliner">Testimonials</span>
+                <h1 class="headline-1">Real results. Real teams. Powered by AI.</h1>
+
+                <div class="testimonials-wrapper">
+                    <div class="testimonial-card">
+                        <div class="testimonial-image">
+                            <img src="https://i.imgur.com/uPuhY88.png" alt="Headshot of Lauren Meyers">
+                        </div>
+                        <div class="testimonial-content">
+                            <p class="testimonial-quote">
+                                "Before AI Supply, our operations were bottlenecked by manual processes and fragmented tools. Within the first month, we automated 60% of our most repetitive workflows. What used to take days now takes minutes — and the consistency is night and day. It's not just faster — it's sharper, more reliable, and scalable."
+                            </p>
+                            <div class="testimonial-footer">
+                                <div class="testimonial-stat">97%
+                                    <span>Boost in efficiency</span>
+                                </div>
+                                <div class="testimonial-author">Lauren Meyers
+                                    <span>Growth Strategist</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-image">
+                            <img src="https://i.imgur.com/YjGvJ8K.png" alt="Coursa logo">
+                        </div>
+                        <div class="testimonial-content">
+                            <p class="testimonial-quote">
+                                "AI Supply changed how we think about scaling. We didn't need to hire a massive team — the AI agents filled in the gaps and made us operate like a company twice our size. It gave us leverage where we had none before. Our bottom line grew 4x in under 6 months without increasing headcount."
+                            </p>
+                            <div class="testimonial-footer">
+                                <div class="testimonial-stat">4x
+                                    <span>Increase in bottom line</span>
+                                </div>
+                                <div class="testimonial-author">Marcus Lee
+                                    <span>CTO, Coursa</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- --- FAQ SECTION --- -->
+        <section id="faq" class="section section-light">
+            <div class="container reveal-up">
+                <span class="eyeliner">FAQ</span>
+                <h1 class="headline-1">Frequently asked questions</h1>
+                
+                <div class="faq-wrapper accordion-wrapper">
+                    <div class="accordion-item active">
+                        <button class="accordion-header">
+                            <h3>What exactly does an AI agent do?</h3>
+                            <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p>AI Supply agents handle end-to-end workflows — from gathering data to executing actions — without needing constant human input.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <h3>How long does it take to get started?</h3>
+                            <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Basic setup and integration can be completed in as little as one business day. More complex, multi-system workflows may take 1-2 weeks to fully configure and test.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <h3>Do I need technical skills to use this?</h3>
+                            <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p>No. Our platform is designed for business users. You can describe tasks in natural language, and our team helps set up the initial agent workflows. No coding is required.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <h3>What tools can it integrate with?</h3>
+                            <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p>AI Supply connects to over 5,000 apps, including Salesforce, Google Workspace, Slack, Jira, SAP, and custom internal APIs. If you use it, we can almost certainly integrate with it.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <h3>Is my data secure?</h3>
+                            <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Yes. We are SOC 2 Type II, GDPR, and CCPA compliant. All data is encrypted in transit and at rest, and our agents operate with role-based access controls to ensure they only access the information you permit.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- --- FOOTER --- -->
+        <footer>
+            <section id="footer-cta" class="section">
+                <div class="container reveal-up">
+                    <span class="eyeliner eyeliner-dark">Get Started</span>
+                    <h1 class="headline-1">Don't scale harder. Scale smarter.</h1>
+                    <p class="body-text">
+                        AI Supply helps you automate complex workflows, reduce operating costs, and scale faster — without hiring more people.
+                    </p>
+                    <div class="footer-buttons">
+                        <a href="#" class="btn btn-primary">Get in touch</a>
+                        <a href="#" class="btn btn-secondary">About us</a>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="footer-copyright">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M2 7L12 12M12 12L22 7M12 12V22M17 4.5L7 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span>AI Supply 2025. All Rights Reserved</span>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Home</a>
+                        <a href="#features">Use cases</a>
+                        <a href="#process">About</a>
+                        <a href="#">Careers</a>
+                        <a href="#">Contact</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms & conditions</a>
+                    </div>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M14 13.5H16.5L17.5 9.5H14V7.5C14 6.47 14 5.5 16 5.5H17.5V2.14C17.174 2.097 15.943 2 14.643 2C11.928 2 10 3.657 10 6.7V9.5H7V13.5H10V22H14V13.5Z"/></svg>
+                        </a>
+                        <a href="#" aria-label="X (Twitter)">
+                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M6.94 5.00002C6.9392 5.39577 6.80169 5.7782 6.55132 6.08253C6.30095 6.38686 5.9529 6.59604 5.56881 6.6806C5.18471 6.76517 4.78652 6.71994 4.43394 6.5519C4.08137 6.38386 3.8003 6.10221 3.63663 5.7483C3.47295 5.39439 3.43555 4.98993 3.53037 4.60477C3.62519 4.21961 3.84755 3.87531 4.16196 3.62699C4.47637 3.37866 4.86242 3.24258 5.26421 3.24002C5.666 3.23746 6.05432 3.36868 6.36402 3.61302C6.67372 3.85736 6.88392 4.20078 6.96347 4.58502H6.94V5.00002ZM7 8.48002H3V21H7V8.48002ZM13.32 8.48002H9.34V21H13.28V14.03C13.28 10.77 18 10.5 18 14.03V21H22V13.25C22 6.9 14.87 7.15 13.32 10.12V8.48002Z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. GSAP SCROLL ANIMATIONS ---
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Find all elements to reveal
+            const revealElements = document.querySelectorAll('.reveal-up');
+            
+            revealElements.forEach(el => {
+                gsap.to(el, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 90%', // Trigger when 90% from top hits viewport
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+
+            // --- 2. TABS INTERACTIVITY (Process Section) ---
+            const tabsContainer = document.querySelector('.tabs-nav');
+            if (tabsContainer) {
+                const tabButtons = tabsContainer.querySelectorAll('.tab-btn');
+                const tabContents = tabsContainer.nextElementSibling.querySelectorAll('.tab-content');
+                
+                tabsContainer.addEventListener('click', (e) => {
+                    const clickedButton = e.target.closest('.tab-btn');
+                    if (!clickedButton) return;
+                    
+                    const tabId = clickedButton.dataset.tab;
+                    
+                    // Update buttons
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    clickedButton.classList.add('active');
+                    
+                    // Update content
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === tabId) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            }
+
+            // --- 3. ACCORDION INTERACTIVITY (Industries & FAQ) ---
+            const accordionWrappers = document.querySelectorAll('.accordion-wrapper');
+            accordionWrappers.forEach(wrapper => {
+                const accordionItems = wrapper.querySelectorAll('.accordion-item');
+                
+                // Set first item active by default
+                const firstItem = accordionItems[0];
+                if (firstItem) {
+                    firstItem.classList.add('active');
+                    const firstContent = firstItem.querySelector('.accordion-content');
+                    firstContent.style.maxHeight = firstContent.scrollHeight + 'px';
+                }
+
+                accordionItems.forEach(item => {
+                    const header = item.querySelector('.accordion-header');
+                    header.addEventListener('click', () => {
+                        const content = item.querySelector('.accordion-content');
+                        
+                        if (item.classList.contains('active')) {
+                            // Close it
+                            item.classList.remove('active');
+                            content.style.maxHeight = '0px';
+                        } else {
+                            // Close all others
+                            accordionItems.forEach(otherItem => {
+                                otherItem.classList.remove('active');
+                                otherItem.querySelector('.accordion-content').style.maxHeight = '0px';
+                            });
+                            // Open this one
+                            item.classList.add('active');
+                            content.style.maxHeight = content.scrollHeight + 'px';
+                        }
+                    });
+                });
+            });
+
+            // --- 4. CALCULATOR LOGIC ---
+            const calculator = document.querySelector('.calculator-wrapper');
+            if (calculator) {
+                const teamSizeSlider = document.getElementById('team-size');
+                const hoursSlider = document.getElementById('hours');
+                const costSlider = document.getElementById('cost');
+                
+                const teamSizeValue = document.getElementById('team-size-value');
+                const hoursValue = document.getElementById('hours-value');
+                const costValue = document.getElementById('cost-value');
+                
+                const resultsHeading = document.getElementById('results-heading');
+                const resultsSubheading = document.getElementById('results-subheading');
+
+                const updateCalculator = () => {
+                    const teamSize = parseInt(teamSizeSlider.value);
+                    const hours = parseInt(hoursSlider.value);
+                    const cost = parseInt(costSlider.value);
+                    
+                    // Update labels
+                    teamSizeValue.textContent = teamSize;
+                    hoursValue.textContent = hours;
+                    costValue.textContent = `$ ${cost}`;
+                    
+                    // Calculate
+                    const hoursPerMonth = (hours * teamSize * 52) / 12; // Hours per week * team * 52 weeks / 12 months
+                    const costPerMonth = hoursPerMonth * cost;
+                    const savingsPerMonth = costPerMonth * 0.80; // 80% savings
+                    
+                    // Format for display
+                    const formatHours = Math.round(hoursPerMonth).toLocaleString('en-US');
+                    const formatCost = Math.round(costPerMonth).toLocaleString('en-US');
+                    const formatSavings = Math.round(savingsPerMonth).toLocaleString('en-US');
+                    
+                    // Update results
+                    resultsHeading.textContent = `You're losing ~${formatHours} hours/month to repetitive tasks. That's $${formatCost}/month in time costs.`;
+                    resultsSubheading.textContent = `AI Supply could reclaim 80% of that — saving ~$${formatSavings}/month.`;
+                };
+
+                // Add event listeners
+                teamSizeSlider.addEventListener('input', updateCalculator);
+                hoursSlider.addEventListener('input', updateCalculator);
+                costSlider.addEventListener('input', updateCalculator);
+                
+                // Initial calculation
+                updateCalculator();
+            }
+
+        });
+    </script>
+</body>
+</html>

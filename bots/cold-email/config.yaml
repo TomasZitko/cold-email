@@ -1,0 +1,541 @@
+# ============================================================================
+# LEAD FILTERING CONFIGURATION
+# Czech Web Design Agency - Advanced Lead Scoring System
+# ============================================================================
+
+# SCORING THRESHOLDS (0-100 scale)
+# Higher score = Better lead (needs web design help)
+scoring:
+  # Priority tiers
+  high_priority_min: 70      # Score 70-100: HIGH PRIORITY
+  medium_priority_min: 40    # Score 40-69: MEDIUM PRIORITY
+  low_priority_max: 39       # Score 0-39: LOW PRIORITY
+
+  # Maximum points per category
+  max_website_quality: 40
+  max_business_age: 25
+  max_industry_fit: 20
+  max_social_media: 10
+  max_company_size: 5
+
+# ============================================================================
+# WEBSITE QUALITY SCORING (40 points max)
+# ============================================================================
+website:
+  # Modern website characteristics (REDUCE score - they don't need help)
+  modern_indicators:
+    - responsive_design
+    - ssl_certificate
+    - fast_load_time
+    - updated_recently
+    - no_broken_links
+
+  # Modern website penalty (if ALL indicators are TRUE)
+  modern_website_penalty: -35  # Nearly eliminates this category
+
+  # OLD/BAD website scoring (ADD points - good leads!)
+  issues:
+    no_ssl: 10                    # HTTP only, no HTTPS
+    not_mobile_friendly: 8        # No viewport meta, no responsive CSS
+    outdated_design_ai: 8         # AI detects old design
+    flash_detected: 10            # Uses Flash technology
+    table_layout: 6               # Uses tables for layout
+    old_copyright: 5              # Copyright year < 2020
+    slow_load_time: 6             # Load time > 5 seconds
+    broken_links: 5               # Has broken links/images
+    no_meta_description: 3        # Missing SEO
+    missing_h1: 2                 # No H1 tag
+
+  # Website age thresholds (from domain WHOIS or archive.org)
+  age_thresholds:
+    very_old: 10      # 10+ years (likely needs refresh)
+    old: 5            # 5-10 years
+    recent: 2         # 2-5 years
+    new: 0            # < 2 years
+
+  # Technical checks
+  timeout_seconds: 10
+  max_load_time_seconds: 5      # Flag if page loads slower than this
+
+# ============================================================================
+# BUSINESS AGE SCORING (25 points max)
+# ============================================================================
+business_age:
+  # Age in months with scoring rules
+  # Format: [min_months, max_months, base_points, website_modifier]
+
+  age_ranges:
+    # 0-6 months: GOLDEN (new businesses)
+    - min: 0
+      max: 6
+      points_no_website: 25       # NEW + NO WEBSITE = GOLDEN
+      points_old_website: 20      # NEW + OLD WEBSITE = very good
+      points_modern_website: 5    # NEW + MODERN = bad (just built)
+
+    # 6-12 months: Still excellent
+    - min: 6
+      max: 12
+      points_no_website: 20
+      points_old_website: 18
+      points_modern_website: 5
+
+    # 1-3 years: Good potential
+    - min: 12
+      max: 36
+      points_no_website: 15
+      points_old_website: 15
+      points_modern_website: 5
+
+    # 3-5 years: Contextual
+    - min: 36
+      max: 60
+      points_no_website: 10
+      points_old_website: 15      # Ready for redesign
+      points_modern_website: 0    # Already sorted
+
+    # 5-15 years: Redesign candidates
+    - min: 60
+      max: 180
+      points_no_website: 0        # Doesn't want website
+      points_old_website: 15      # EXCELLENT redesign opportunity
+      points_modern_website: 0    # Already handled
+
+    # 15+ years: Established
+    - min: 180
+      max: 999999
+      points_no_website: 0        # Survived without, won't change
+      points_old_website: 10      # Still relevant if old site
+      points_modern_website: 0
+
+# ============================================================================
+# INDUSTRY FIT SCORING (20 points max)
+# ============================================================================
+industry:
+  # Customer-facing industries (20 points)
+  customer_facing:
+    keywords:
+      # Food & Beverage
+      - restaurace
+      - restaurant
+      - kavárna
+      - café
+      - cafe
+      - bar
+      - pub
+      - bistro
+      - cukrárna
+      - pizzerie
+      - fast food
+
+      # Beauty & Wellness
+      - kadeřnictví
+      - holič
+      - barber
+      - beauty salon
+      - kosmetika
+      - spa
+      - wellness
+      - masáže
+      - nehtové studio
+
+      # Fitness
+      - fitness
+      - posilovna
+      - gym
+      - jóga
+      - yoga studio
+      - taneční studio
+
+      # Retail
+      - obchod
+      - butik
+      - boutique
+      - retail
+      - prodejna
+      - shop
+
+      # Accommodation
+      - hotel
+      - penzion
+      - pension
+      - ubytování
+      - accommodation
+      - hostel
+
+      # Healthcare (private)
+      - zubní ordinace
+      - dental clinic
+      - lékařská ordinace
+      - medical clinic
+      - veterina
+      - veterinary
+
+    points: 20
+
+  # Professional services (15 points)
+  professional_services:
+    keywords:
+      - advokát
+      - lawyer
+      - právní kancelář
+      - law firm
+      - účetní
+      - accountant
+      - daňový poradce
+      - tax advisor
+      - konzultant
+      - consultant
+      - architekt
+      - architect
+      - designer
+      - realitní kancelář
+      - real estate
+      - pojišťovna
+      - insurance
+
+    points: 15
+
+  # Local services (10 points - only if 3+ employees)
+  local_services:
+    keywords:
+      - instalatér
+      - plumber
+      - elektrikář
+      - electrician
+      - topenář
+      - HVAC
+      - stavební firma
+      - construction
+      - autoservis
+      - auto repair
+      - mechanic
+      - čistírna
+      - cleaning
+      - údržba
+      - maintenance
+
+    points: 10
+    min_employees: 3
+
+  # B2B / Other (5 points)
+  b2b_other:
+    points: 5
+
+# ============================================================================
+# SOCIAL MEDIA SCORING (10 points max)
+# ============================================================================
+social_media:
+  platforms:
+    instagram:
+      active_no_website: 10      # GOLDEN: Active IG + no website
+      active_old_website: 5      # Good: Active IG + old website
+      inactive: 0
+
+    facebook:
+      active_no_website: 8       # Very good: Active FB + no website
+      active_old_website: 5      # Good: Active FB + old website
+      inactive: 0
+
+  # Activity detection thresholds
+  activity:
+    recent_post_days: 30         # Post within last 30 days = active
+    min_followers: 50            # Minimum followers to consider active
+
+  # Search patterns
+  search:
+    enabled: true
+    timeout_seconds: 5
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+
+# ============================================================================
+# COMPANY SIZE SCORING (5 points max)
+# ============================================================================
+company_size:
+  ranges:
+    - min: 3
+      max: 20
+      points: 5       # Sweet spot - can afford, needs help
+
+    - min: 21
+      max: 50
+      points: 3       # Still good
+
+    - min: 1
+      max: 2
+      points: 1       # Might be too small
+
+    - min: 51
+      max: 999999
+      points: 2       # Might have in-house team
+
+# ============================================================================
+# AUTO-REJECT RULES
+# ============================================================================
+auto_reject:
+  # Government entities
+  government:
+    keywords:
+      - ministerstvo
+      - úřad
+      - státní
+      - municipal
+      - municipality
+      - obec
+      - město
+      - kraj
+      - government
+      - public sector
+      - veřejná správa
+
+    # Exceptions (private schools, etc.)
+    exceptions:
+      - soukromá škola
+      - private school
+
+  # Holding companies
+  holding:
+    keywords:
+      - holding
+      - investment
+      - investiční fond
+      - fund
+
+    # Must also have < 2 employees
+    max_employees: 2
+
+  # B2B-only industries (no customer interaction)
+  b2b_only:
+    keywords:
+      - velkoobchod
+      - wholesale
+      - výroba
+      - manufacturing
+      - sklad
+      - warehouse
+      - logistics
+      - logistika
+      - distributor
+      - distribution
+
+  # No contact info
+  no_contact:
+    enabled: true    # Reject if NO email AND NO phone AND NO website
+
+  # Blacklist
+  blacklist:
+    domains: []      # Add domains to blacklist
+    companies: []    # Add company names to blacklist
+
+# ============================================================================
+# CZECH-SPECIFIC SETTINGS
+# ============================================================================
+czech:
+  # Business type recognition
+  business_types:
+    - s.r.o.          # Společnost s ručením omezeným (LLC)
+    - a.s.            # Akciová společnost (Joint-stock company)
+    - OSVČ            # Osoba samostatně výdělečně činná (Sole proprietor)
+    - v.o.s.          # Veřejná obchodní společnost (General partnership)
+    - k.s.            # Komanditní společnost (Limited partnership)
+    - družstvo        # Cooperative
+
+  # Phone number formats
+  phone:
+    patterns:
+      - "^\\+420\\s?[0-9]{9}$"           # +420 123456789
+      - "^00420\\s?[0-9]{9}$"            # 00420 123456789
+      - "^[0-9]{3}\\s?[0-9]{3}\\s?[0-9]{3}$"  # 123 456 789
+
+    default_country_code: "+420"
+
+  # Address parsing
+  address:
+    patterns:
+      postal_code: "^[0-9]{3}\\s?[0-9]{2}$"  # 123 45 or 12345
+
+    # Common street suffixes
+    street_suffixes:
+      - ulice
+      - třída
+      - náměstí
+      - nábřeží
+      - cesta
+      - sídliště
+
+  # Character handling (diacritics)
+  characters:
+    normalize: false   # Keep Czech characters (don't convert to ASCII)
+    encoding: utf-8
+
+# ============================================================================
+# PERFORMANCE & OPTIMIZATION
+# ============================================================================
+performance:
+  # Multi-threading
+  threading:
+    enabled: true
+    max_workers: 50              # Max concurrent website checks
+    rate_limit_delay: 0.1        # Seconds between requests (per thread)
+
+  # Caching
+  cache:
+    enabled: true
+    cache_file: data/analysis_cache.json
+    ttl_days: 7                  # Cache results for 7 days
+
+  # Resume capability
+  resume:
+    enabled: true
+    checkpoint_file: data/processing_checkpoint.json
+    checkpoint_interval: 100     # Save checkpoint every N leads
+
+  # Progress tracking
+  progress:
+    show_progress_bar: true
+    log_level: INFO              # DEBUG, INFO, WARNING, ERROR
+
+# ============================================================================
+# DATA CLEANING
+# ============================================================================
+data_cleaning:
+  # Deduplication
+  deduplication:
+    enabled: true
+    match_columns:               # Consider duplicates if these match
+      - company_name
+
+    merge_strategy:              # How to merge duplicates
+      emails: concatenate        # email1@x.com, email2@y.com
+      phones: concatenate        # +420111, +420222
+      other: first_non_null      # Take first non-null value
+
+  # Validation
+  validation:
+    email:
+      regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+      verify_mx: false           # Don't verify MX records (slow)
+
+    phone:
+      min_length: 9
+      max_length: 15
+
+    website:
+      add_https: true            # Auto-add https:// if missing
+      validate_reachable: true   # Check if website is reachable
+
+# ============================================================================
+# OUTPUT SETTINGS
+# ============================================================================
+output:
+  # File paths
+  files:
+    high_priority: data/HIGH_PRIORITY_LEADS.csv
+    medium_priority: data/MEDIUM_PRIORITY_LEADS.csv
+    low_priority: data/LOW_PRIORITY_LEADS.csv
+    rejected: data/REJECTED_LEADS.csv
+    statistics: data/STATISTICS_REPORT.txt
+    error_log: data/errors.log
+
+  # CSV format
+  csv:
+    encoding: utf-8-sig          # UTF-8 with BOM for Excel compatibility
+    delimiter: ","
+    quoting: minimal
+
+  # Columns to include in output
+  columns:
+    - company_name
+    - score
+    - email
+    - phone
+    - website
+    - website_issues
+    - industry
+    - age_months
+    - employees
+    - social_media
+    - notes
+    - priority
+
+  # Statistics to include in report
+  statistics:
+    - total_leads_processed
+    - leads_rejected_count
+    - rejection_reasons_breakdown
+    - score_distribution
+    - industry_breakdown
+    - top_10_leads
+
+# ============================================================================
+# AI ANALYSIS SETTINGS
+# ============================================================================
+ai:
+  # Google Gemini for website screenshot analysis
+  gemini:
+    enabled: true
+    model: gemini-1.5-flash
+    prompt: |
+      Analyze this website screenshot. Is the design:
+      1. MODERN (clean, responsive, professional, updated recently)
+      2. OUTDATED (old-fashioned, non-responsive, cluttered, dated graphics)
+
+      Consider:
+      - Visual design quality
+      - Layout structure
+      - Typography
+      - Color scheme
+      - Image quality
+      - Mobile responsiveness indicators
+
+      Respond with ONLY one word: "MODERN" or "OUTDATED"
+
+    temperature: 0.1
+    max_retries: 2
+
+  # Screenshot settings
+  screenshot:
+    enabled: true
+    width: 1280
+    height: 800
+    format: png
+    quality: 80
+    timeout_seconds: 15
+
+# ============================================================================
+# EMAIL TEMPLATE MATCHING
+# ============================================================================
+email_templates:
+  # Map industry categories to template names
+  category_mapping:
+    customer_facing: "Customer-Facing"
+    professional_services: "Professional"
+    local_services: "Service"
+    b2b_other: "Default"
+
+  # Dynamic variable extraction
+  variables:
+    - company_name
+    - business_category
+    - specific_issue          # Pick top issue from website_issues
+    - industry
+    - website_url
+
+# ============================================================================
+# LOGGING
+# ============================================================================
+logging:
+  level: INFO
+  format: "%(asctime)s - %(levelname)s - %(message)s"
+  date_format: "%Y-%m-%d %H:%M:%S"
+
+  # Log files
+  files:
+    main: logs/lead_filter.log
+    errors: logs/errors.log
+    debug: logs/debug.log
+
+  # Rotation
+  rotation:
+    enabled: true
+    max_bytes: 10485760        # 10 MB
+    backup_count: 5

@@ -1,0 +1,14 @@
+requests
+beautifulsoup4
+python-dotenv
+pandas
+selenium
+webdriver-manager
+openai
+python-whois
+notion-client
+google-generativeai
+pyyaml
+tqdm
+openpyxl
+validators

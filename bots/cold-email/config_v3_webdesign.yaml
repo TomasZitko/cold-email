@@ -1,0 +1,746 @@
+# ============================================================================
+# LEAD FILTERING CONFIGURATION V3 - WEB DESIGN CONVERSION OPTIMIZATION
+# Based on Web Designer Industry Research & Best Practices
+# ============================================================================
+#
+# PHILOSOPHY SHIFT: Quality > Quantity
+# - Target 10-15% conversion rate (vs 2-3% unqualified)
+# - Focus on $8k-$15k project value clients
+# - Prioritize B2B professional services
+# - 3-5 year business age sweet spot (redesign cycle)
+# - Revenue $100k+ annually
+#
+# ============================================================================
+
+# SCORING THRESHOLDS (0-100 scale)
+# Adjusted for conversion probability, not just website quality
+scoring:
+  high_priority_min: 70      # Score 70-100: PURSUE ACTIVELY (10-15% conversion)
+  medium_priority_min: 50    # Score 50-69: QUALIFIED PROSPECTS (5-10% conversion)
+  low_priority_max: 49       # Score 0-49: NURTURE/LOW PRIORITY (2-5% conversion)
+
+  # Maximum points per category (REWEIGHTED based on research)
+  max_redesign_probability: 30   # NEW: Likelihood they need redesign NOW
+  max_industry_tier: 30          # INCREASED: Industry = budget & conversion
+  max_business_maturity: 20      # REFRAMED: Age + revenue indicators
+  max_website_issues: 15         # REDUCED: Issues matter less than niche
+  max_engagement_signals: 5      # NEW: Social media, reviews, activity
+
+# ============================================================================
+# 1. REDESIGN PROBABILITY SCORING (30 points max) - HIGHEST WEIGHT
+# ============================================================================
+# Based on research: Websites redesigned every 3-5 years
+# Sweet spot: 3-5 year old businesses OR 3-5 year old websites
+
+redesign_probability:
+  # Website age scoring (from domain registration or last major update)
+  website_age_scoring:
+    - min_years: 3
+      max_years: 5
+      points: 30            # PERFECT: Due for redesign
+      probability: "VERY HIGH"
+
+    - min_years: 5
+      max_years: 7
+      points: 25            # EXCELLENT: Overdue for redesign
+      probability: "HIGH"
+
+    - min_years: 2
+      max_years: 3
+      points: 15            # GOOD: Approaching redesign cycle
+      probability: "MEDIUM"
+
+    - min_years: 7
+      max_years: 10
+      points: 20            # GOOD: Very outdated
+      probability: "MEDIUM-HIGH"
+
+    - min_years: 0
+      max_years: 2
+      points: 0             # BAD: Recently redesigned
+      probability: "VERY LOW"
+
+    - min_years: 10
+      max_years: 99
+      points: 10            # MAYBE: Ancient (might not care)
+      probability: "LOW-MEDIUM"
+
+  # Business age (if website age unknown, use business age as proxy)
+  business_age_scoring:
+    - min_months: 36        # 3 years
+      max_months: 60        # 5 years
+      points: 25            # EXCELLENT: Likely on original website
+      notes: "Prime redesign window"
+
+    - min_months: 60        # 5 years
+      max_months: 120       # 10 years
+      points: 20            # GOOD: Established, likely outdated site
+      notes: "Proven business, outdated presence"
+
+    - min_months: 24        # 2 years
+      max_months: 36        # 3 years
+      points: 12            # OK: Approaching window
+      notes: "Watch for redesign signals"
+
+    - min_months: 12        # 1 year
+      max_months: 24        # 2 years
+      points: 5             # LOW: Recently launched
+      notes: "Too new, likely has site"
+
+    - min_months: 0
+      max_months: 12
+      points: 0             # AVOID: Brand new
+      notes: "Startup - limited budget"
+
+    - min_months: 120       # 10+ years
+      max_months: 999999
+      points: 8             # MAYBE: If no website, won't get one
+      notes: "Check if they have website"
+
+  # Redesign signals (ADD bonus points if detected)
+  redesign_signals:
+    old_copyright_year:
+      threshold: 2020       # Copyright year <= 2020
+      bonus_points: 8
+      signal: "Outdated copyright = neglected site"
+
+    flash_or_deprecated_tech:
+      bonus_points: 10
+      signal: "Flash/tables = urgent redesign need"
+
+    not_mobile_friendly:
+      bonus_points: 8
+      signal: "Mobile-first is critical now"
+
+    broken_ssl:
+      bonus_points: 10
+      signal: "Security issue = urgent"
+
+    slow_load_time:
+      threshold_seconds: 5
+      bonus_points: 5
+      signal: "Poor UX = losing customers"
+
+    template_site_detected:
+      # Wix, Weebly, Squarespace, WordPress.com free
+      platforms: ["wix", "weebly", "squarespace", "wordpress.com", "webnode"]
+      bonus_points: 12
+      signal: "DIY site = ready for professional help"
+
+    broken_links_images:
+      threshold: 3
+      bonus_points: 6
+      signal: "Neglected site = owner aware of issues"
+
+    competitor_comparison:
+      # If competitors have better sites
+      bonus_points: 10
+      signal: "Falling behind competition"
+
+# ============================================================================
+# 2. INDUSTRY TIER SCORING (30 points max) - CONVERSION & BUDGET FOCUS
+# ============================================================================
+# Based on research: B2B professional services = highest conversion & budgets
+# Tiered by average project value and conversion rate
+
+industry_tiers:
+  # TIER 1: Premium B2B Professional (30 pts) - $8k-$15k projects, 10-15% conversion
+  tier_1_premium_b2b:
+    keywords:
+      # Legal & Financial (HIGHEST paying)
+      - advokát
+      - advokátní kancelář
+      - lawyer
+      - law firm
+      - legal
+      - právník
+      - notář
+      - notary
+      - účetní
+      - accountant
+      - accounting firm
+      - daňový poradce
+      - tax advisor
+      - finanční poradce
+      - financial advisor
+      - investiční poradce
+      - wealth management
+      - auditor
+
+      # Medical & Healthcare (Private practices ONLY)
+      - zubní ordinace
+      - zubní klinika
+      - dental
+      - stomatologie
+      - lékařská ordinace
+      - private clinic
+      - soukromá klinika
+      - med spa
+      - medical spa
+      - veterina
+      - veterinární klinika
+      - chiropraktik
+      - chiropractor
+      - fyzioterapie
+      - physiotherapy
+
+      # B2B Consulting (HIGH value)
+      - management consulting
+      - business consultant
+      - strategický poradce
+      - hr consultant
+      - it consultant
+      - technology consultant
+      - bezpečnostní poradenství
+
+    points: 30
+    avg_project_value: 12000
+    conversion_rate: "10-15%"
+    notes: "Premium clients, value-based pricing, understand ROI"
+
+  # TIER 2: Visual & Creative Premium (28 pts) - $6k-$12k projects
+  tier_2_visual_premium:
+    keywords:
+      # Real Estate
+      - realitní kancelář
+      - real estate
+      - reality
+      - property management
+      - realitní makléř
+      - real estate agent
+      - developer
+      - developerský projekt
+
+      # Architecture & Design
+      - architekt
+      - architektonická kancelář
+      - architecture
+      - interior design
+      - interiérový design
+      - designer
+
+      # Luxury & Boutique
+      - luxury
+      - luxusní
+      - boutique
+      - exclusive
+      - premium
+
+    points: 28
+    avg_project_value: 10000
+    conversion_rate: "8-12%"
+    notes: "Visual industries, need portfolios, appreciate design"
+
+  # TIER 3: Coaching & Online Services (25 pts) - $5k-$10k projects
+  tier_3_coaching_online:
+    keywords:
+      - coach
+      - koučink
+      - coaching
+      - kouč
+      - life coach
+      - business coach
+      - executive coach
+      - online kurzy
+      - online courses
+      - e-learning
+      - škol
+
+ení
+      - training
+      - workshop
+      - webinář
+      - webinar
+      - mentor
+      - mentoring
+      - personal development
+
+    points: 25
+    avg_project_value: 7500
+    conversion_rate: "7-10%"
+    notes: "Personal brand focus, understand online value"
+
+  # TIER 4: E-commerce & Online Retail (22 pts) - $4k-$8k projects
+  tier_4_ecommerce:
+    keywords:
+      - e-shop
+      - eshop
+      - e-commerce
+      - ecommerce
+      - online shop
+      - online store
+      - webshop
+      - internetový obchod
+      - online prodej
+
+    points: 22
+    avg_project_value: 6000
+    conversion_rate: "6-9%"
+    notes: "Clear ROI, ongoing relationship, conversion-focused"
+
+  # TIER 5: Premium Wellness & Health (20 pts) - $3k-$6k projects
+  tier_5_premium_wellness:
+    keywords:
+      # High-end Wellness
+      - spa
+      - wellness centrum
+      - wellness center
+      - medical spa
+      - beauty clinic
+      - kosmetická klinika
+      - estetická medicína
+
+      # Premium Fitness
+      - fitness centrum
+      - fitness studio
+      - personal training
+      - personal trainer
+      - yoga studio
+      - pilates studio
+      - crossfit
+      - wellness coach
+
+    points: 20
+    avg_project_value: 4500
+    conversion_rate: "5-8%"
+    notes: "Customer-facing, value aesthetics, growing market"
+
+  # TIER 6: Hospitality & Tourism (17 pts) - $3k-$6k projects
+  tier_6_hospitality:
+    keywords:
+      - hotel
+      - boutique hotel
+      - luxury hotel
+      - penzion
+      - pension
+      - ubytování
+      - accommodation
+      - bed and breakfast
+      - resort
+      - fine dining
+      - restaurant
+      - restaurace
+      - event venue
+      - wedding venue
+
+    points: 17
+    avg_project_value: 4000
+    conversion_rate: "5-7%"
+    notes: "Visual industry, booking systems, seasonal"
+
+  # TIER 7: Professional Local Services (14 pts) - $2k-$4k IF 3+ employees
+  tier_7_local_professional:
+    keywords:
+      - kadeřnictví
+      - hair salon
+      - barber shop
+      - holič
+      - beauty salon
+      - nail salon
+      - nehtové studio
+      - autoservis
+      - auto repair
+      - auto service
+      - auto detailing
+
+    points: 14
+    min_employees: 3
+    avg_project_value: 3000
+    conversion_rate: "4-6%"
+    notes: "Local services, need 3+ employees for budget"
+
+  # TIER 8: Established Local Services (10 pts) - $2k-$3k IF 5+ employees
+  tier_8_established_local:
+    keywords:
+      - stavební firma
+      - construction company
+      - instalatér
+      - plumbing company
+      - elektrikář
+      - electrical contractor
+      - topenář
+      - hvac
+      - čistírna
+      - cleaning company
+      - landscaping
+      - zahradnictví
+
+    points: 10
+    min_employees: 5
+    avg_project_value: 2500
+    conversion_rate: "3-5%"
+    notes: "Trade services, need multiple employees"
+
+  # TIER 9: Basic Local B2C (5 pts) - $1k-$2k - LOW PRIORITY
+  tier_9_basic_local:
+    keywords:
+      - kavárna
+      - café
+      - cafe
+      - coffee shop
+      - bar
+      - pub
+      - bistro
+      - pizza
+      - fast food
+      - obchod
+      - shop
+      - prodejna
+      - retail store
+
+    points: 5
+    avg_project_value: 1500
+    conversion_rate: "2-4%"
+    notes: "Low budgets, price-sensitive, volume play only"
+
+  # Default for unknown industries
+  tier_default:
+    points: 3
+    avg_project_value: 2000
+    conversion_rate: "2-3%"
+
+# ============================================================================
+# 3. BUSINESS MATURITY SCORING (20 points max)
+# ============================================================================
+# Combines age, revenue indicators, and growth signals
+
+business_maturity:
+  # Revenue proxy indicators (since actual revenue often unavailable)
+  revenue_indicators:
+    # Employee count as revenue proxy
+    employee_ranges:
+      - min: 10
+        max: 50
+        points: 10
+        estimated_revenue: "100k-500k"
+        quality: "IDEAL - can afford $5k+ projects"
+
+      - min: 5
+        max: 9
+        points: 7
+        estimated_revenue: "50k-100k"
+        quality: "GOOD - can afford $3k+ projects"
+
+      - min: 3
+        max: 4
+        points: 5
+        estimated_revenue: "30k-50k"
+        quality: "OK - can afford $2k+ projects"
+
+      - min: 1
+        max: 2
+        points: 2
+        estimated_revenue: "<30k"
+        quality: "RISKY - limited budget"
+
+      - min: 51
+        max: 200
+        points: 6
+        estimated_revenue: "500k-2M"
+        quality: "GOOD - but may have in-house"
+
+      - min: 201
+        max: 999999
+        points: 3
+        estimated_revenue: "2M+"
+        quality: "LIKELY has in-house team"
+
+    # Multiple locations (indicator of success)
+    multi_location_bonus:
+      - locations: 2
+        bonus_points: 5
+        signal: "Expanding - proven model"
+
+      - locations: 3-5
+        bonus_points: 8
+        signal: "Successful chain - high budget"
+
+      - locations: 6+
+        bonus_points: 4
+        signal: "Corporate - may have centralized marketing"
+
+    # Online presence quality (paradox: good social + bad website = opportunity)
+    online_presence_score:
+      active_google_business:
+        points: 3
+        signal: "Cares about online presence"
+
+      many_reviews:
+        threshold: 20
+        points: 4
+        signal: "Established reputation"
+
+      active_social_no_website:
+        points: 10
+        signal: "GOLDEN - understands marketing, needs website"
+
+      active_social_bad_website:
+        points: 7
+        signal: "EXCELLENT - ready for upgrade"
+
+  # Industry certifications/memberships (signals professionalism & budget)
+  professional_signals:
+    chamber_of_commerce:
+      points: 2
+      signal: "Invested in business community"
+
+    industry_association:
+      points: 3
+      signal: "Professional standards"
+
+    certifications:
+      points: 4
+      signal: "Quality-focused, willing to invest"
+
+# ============================================================================
+# 4. WEBSITE ISSUES SCORING (15 points max) - REDUCED WEIGHT
+# ============================================================================
+# Issues matter, but less than industry tier and redesign timing
+
+website_issues:
+  critical_issues:
+    no_ssl: 5              # Security concern
+    flash_detected: 5      # Completely outdated
+    not_mobile: 4          # Mobile-first era
+    frameset: 5            # Ancient technology
+
+  major_issues:
+    old_copyright: 3       # <= 2020
+    slow_load: 3           # > 5 seconds
+    broken_links: 3        # 3+ broken
+    table_layout: 3        # Old layout method
+    no_responsive_css: 3   # No @media queries
+
+  minor_issues:
+    missing_h1: 1
+    missing_meta_desc: 1
+    poor_seo: 2
+
+  # Modern website PENALTY (they don't need help)
+  modern_website_penalty:
+    all_modern_indicators: -10    # SSL + mobile + responsive + fast
+    signal: "Recently redesigned - SKIP"
+
+# ============================================================================
+# 5. ENGAGEMENT SIGNALS (5 points max)
+# ============================================================================
+engagement_signals:
+  social_media_activity:
+    instagram_active: 2
+    facebook_active: 2
+    linkedin_active: 1
+
+  review_presence:
+    google_reviews_20plus: 3
+    recent_reviews: 2            # Within 30 days
+
+  content_freshness:
+    blog_updated_recently: 2
+    news_section_active: 1
+
+# ============================================================================
+# BUSINESS STATUS DETECTION - NEW FEATURE
+# ============================================================================
+business_status:
+  # Google Business Profile status
+  check_methods:
+    - google_business_api
+    - google_maps_scrape
+    - website_check
+
+  status_types:
+    permanently_closed:
+      auto_reject: true
+      rejection_reason: "Business permanently closed"
+
+    temporarily_closed:
+      reduce_score: 50          # Reduce score by 50%
+      warning: "Temporarily closed - verify before outreach"
+
+    open:
+      no_penalty: true
+
+    unknown:
+      assume_open: true          # Benefit of the doubt
+
+  # Website indicators of closure
+  closure_indicators:
+    keywords:
+      - "permanently closed"
+      - "out of business"
+      - "no longer operating"
+      - "closed down"
+      - "zavřeno natrvalo"
+      - "ukončili jsme činnost"
+
+    website_offline:
+      consecutive_checks: 3      # Must fail 3 times
+      penalty: "Website offline - likely closed"
+
+# ============================================================================
+# AUTO-REJECT RULES - ENHANCED
+# ============================================================================
+auto_reject:
+  # Government entities
+  government:
+    keywords:
+      - ministerstvo
+      - úřad
+      - státní
+      - municipality
+      - obec
+      - město
+      - kraj
+      - government
+    exceptions:
+      - soukromá škola
+      - private school
+      - soukromá klinika
+
+  # Holding companies & investment firms
+  holding:
+    keywords:
+      - holding
+      - investment fund
+      - investiční fond
+      - venture capital
+    max_employees: 2
+
+  # Pure B2B manufacturing/wholesale
+  b2b_manufacturing:
+    keywords:
+      - velkoobchod
+      - wholesale
+      - výroba
+      - manufacturing
+      - sklad
+      - warehouse
+      - distributor
+      - distribution center
+      - logistics
+      - logistika
+
+  # No contact info
+  no_contact:
+    enabled: true
+
+  # Recently redesigned (modern website in last 2 years)
+  recently_redesigned:
+    enabled: true
+    indicators:
+      - modern_design_all_indicators
+      - copyright_year_current
+      - new_domain_registration        # < 2 years old
+
+  # DIY free platforms (unlikely to convert)
+  diy_free_platforms:
+    enabled: true
+    platforms:
+      - "wix.com/free"
+      - "weebly.com"
+      - "wordpress.com"               # NOT .org
+      - "webnode.cz/free"
+      - "carrd.co"
+    note: "DIY free users typically won't pay for professional design"
+
+  # Permanently closed businesses
+  permanently_closed:
+    enabled: true
+    auto_reject: true
+
+  # Franchise with no local autonomy
+  corporate_franchise:
+    keywords:
+      - "corporate website only"
+      - "see main franchise site"
+    note: "No local marketing budget"
+
+# ============================================================================
+# PERFORMANCE SETTINGS
+# ============================================================================
+performance:
+  threading:
+    enabled: true
+    max_workers: 50
+    rate_limit_delay: 0.1
+
+  cache:
+    enabled: true
+    cache_file: data/analysis_cache_v3.json
+    ttl_days: 7
+
+  resume:
+    enabled: true
+    checkpoint_file: data/checkpoint_v3.json
+    checkpoint_interval: 100
+
+  progress:
+    show_progress_bar: true
+    log_level: INFO
+
+# ============================================================================
+# OUTPUT SETTINGS
+# ============================================================================
+output:
+  files:
+    high_priority: data/HIGH_PRIORITY_LEADS_V3.csv
+    medium_priority: data/MEDIUM_PRIORITY_LEADS_V3.csv
+    low_priority: data/LOW_PRIORITY_LEADS_V3.csv
+    rejected: data/REJECTED_LEADS_V3.csv
+    statistics: data/STATISTICS_REPORT_V3.txt
+    error_log: data/errors_v3.log
+
+  csv:
+    encoding: utf-8-sig
+    delimiter: ","
+    quoting: minimal
+
+  columns:
+    - company_name
+    - score
+    - conversion_probability      # NEW: Estimated conversion %
+    - avg_project_value           # NEW: Estimated project value
+    - industry_tier               # NEW: Which tier (1-9)
+    - redesign_probability        # NEW: Redesign timing score
+    - business_maturity_score     # NEW: Maturity indicators
+    - email
+    - phone
+    - website
+    - website_issues
+    - website_age_years           # NEW
+    - business_age_years          # NEW
+    - employees
+    - estimated_revenue           # NEW: Based on proxies
+    - social_media_presence
+    - google_reviews_count        # NEW
+    - business_status             # NEW: Open/Closed
+    - priority
+    - notes
+
+  statistics:
+    - total_leads_processed
+    - leads_rejected_count
+    - rejection_reasons_breakdown
+    - score_distribution
+    - industry_tier_distribution  # NEW
+    - avg_conversion_probability  # NEW
+    - total_pipeline_value        # NEW: Sum of (count * avg_project_value)
+    - top_20_leads                # Increased from 10
+
+# ============================================================================
+# LOGGING
+# ============================================================================
+logging:
+  level: INFO
+  format: "%(asctime)s - %(levelname)s - %(message)s"
+  date_format: "%Y-%m-%d %H:%M:%S"
+
+  files:
+    main: logs/lead_filter_v3.log
+    errors: logs/errors_v3.log
+    debug: logs/debug_v3.log
+
+  rotation:
+    enabled: true
+    max_bytes: 10485760
+    backup_count: 5
