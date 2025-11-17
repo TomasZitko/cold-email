@@ -1,0 +1,486 @@
+---TEMPLATE---
+CATEGORY: portfolio-showcase
+PRIORITY: medium
+FRAMEWORK: PAS (Problem-Agitate-Solution)
+SUBJECT: Rychlý nápad pro {company_name}
+
+Dobrý den,
+
+všiml jsem si webu {company_name} a vidím pár věcí, které by mohly brzdit vaše konverze.
+
+Většina návštěvníků opouští web během prvních 5 sekund - většinou kvůli:
+• Pomalému načítání stránky
+• Nereagujícímu mobilnímu designu
+• Nejasné nabídce hodnoty
+
+Pro klienta v podobném oboru jsme zvýšili konverze o 34% jen vyřešením těchto tří věcí.
+
+Rád bych vám ukázal naši portfolio a pár konkrétních nápadů, co by fungovalo pro {company_name}.
+
+Dává to smysl domluvit si 10minutový hovor tento týden?
+
+S pozdravem,
+{sender_name}
+{sender_company}
+
+P.S. Můžu vám poslat quick audit vašeho webu zdarma, pokud máte zájem.
+
+---TEMPLATE---
+CATEGORY: portfolio-showcase
+PRIORITY: medium
+FRAMEWORK: Before-After-Bridge
+SUBJECT: Moderní web pro {company_name}?
+
+Ahoj,
+
+spousta firem v oboru {industry} má stejný problém - zastaralý web, který nevypadá profesionálně a zákazníci si radši vyberou konkurenci.
+
+Představte si, že váš web:
+• Načítá se pod 2 sekundy
+• Perfektně funguje na mobilu
+• Vypadá jako lídr v oboru
+• Automaticky generuje poptávky
+
+Přesně tohle jsme udělali pro {case_study_name} - během 3 měsíců viděli nárůst poptávek o 45%.
+
+Rád bych vám ukázal naši portfolio a konkrétní příklady, jak by váš nový web mohl vypadat.
+
+Máte 15 minut tento nebo příští týden?
+
+Díky,
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: portfolio-showcase
+PRIORITY: medium
+FRAMEWORK: AIDA
+SUBJECT: {company_name} - rychlá příležitost
+
+Dobrý den,
+
+věděli jste, že 88% návštěvníků se nevrátí na web, který má špatný UX?
+
+Dělám weby, které:
+✓ Vypadají profesionálně
+✓ Konvertují návštěvníky na zákazníky
+✓ Staví důvěru a autoritu
+
+Naši klienti průměrně vidí:
+• 30-50% více poptávek
+• 2-3x lepší konverze
+• Návratnost investice do 6 měsíců
+
+Mám pro vás pár nápadů, jak by {company_name} mohla vyniknout online.
+
+Můžete se podívat na naši portfolio zde: {portfolio_link}
+
+Zajímá vás 10minutový hovor?
+
+Hezký den,
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: portfolio-showcase
+PRIORITY: low
+FRAMEWORK: Social Proof
+SUBJECT: Modernizace webu - inspirace od konkurence
+
+Ahoj {first_name},
+
+dělal jsem redesign pro pár firem v oboru {industry} a výsledky byly impozantní:
+
+• {case_study_1}: +40% návštěvnost, +27% konverze
+• {case_study_2}: 2x více poptávek za měsíc
+• {case_study_3}: -60% bounce rate
+
+Všechny měly podobné výchozí problémy jako {company_name} - zastaralý design, pomalé načítání, špatný mobilní zážitek.
+
+Mám portfolio a case studies, které by vás mohly zajímat.
+
+Pošlu vám to?
+
+Díky,
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: custom-demo
+PRIORITY: high
+FRAMEWORK: Personalized Problem-Solution
+SUBJECT: Konkrétní nápad pro {company_name}
+
+Dobrý den,
+
+narazil jsem na web {company_name} a vidím obrovský potenciál.
+
+Všiml jsem si několika konkrétních věcí:
+{specific_issues}
+
+Pro firmu jako {company_name}, tohle může znamenat:
+• Ztrátu {lost_revenue}+ Kč měsíčně na neudělaných obchodech
+• Zákazníky, kteří si vyberou konkurenci kvůli lepšímu webu
+• Nižší důvěru v profesionalitu firmy
+
+Připravil jsem pro vás KONKRÉTNÍ MOCKUP, jak by mohl vypadat nový web {company_name} - moderní, rychlý, zaměřený na konverze.
+
+Můžu vám ho poslat nebo se sejít na 15min video call a ukázat vám to?
+
+{custom_value_proposition}
+
+S pozdravem,
+{sender_name}
+{sender_company}
+
+P.S. Tenhle mockup jsem dělal speciálně pro vás, není to generic template. Chce to jen 15 minut vašeho času.
+
+---TEMPLATE---
+CATEGORY: custom-demo
+PRIORITY: high
+FRAMEWORK: Before-After-Bridge + Demo
+SUBJECT: Demo: Nový web pro {company_name} 🎨
+
+Ahoj {first_name},
+
+dělal jsem research webů v oboru {industry} a {company_name} má potenciál být lídr.
+
+Aktuální stav vašeho webu:
+{current_website_analysis}
+
+Vytvořil jsem pro vás DEMO redesign, který ukazuje:
+• Moderní design, který buduje důvěru
+• Optimalizovaný conversion funnel
+• Mobilní-first přístup
+• O 70% rychlejší načítání
+
+{specific_demo_benefits}
+
+Tenhle redesign by mohl generovat {estimated_new_leads} nových poptávek měsíčně, což znamená {estimated_revenue}+ Kč extra příjmu.
+
+Můžu vám ukázat kompletní demo? Zabere to jen 10 minut.
+
+[Kalendář odkaz] nebo odpovězte s vašim časem.
+
+Díky,
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: custom-demo
+PRIORITY: high
+FRAMEWORK: Hyper-Personalized Audit
+SUBJECT: Audit webu {company_name} - našel jsem {issue_count} problémů
+
+Dobrý den,
+
+udělal jsem si analýzu vašeho webu {website_url} a našel {issue_count} konkrétních problémů, které vás stojí zákazníky:
+
+KRITICKÉ PROBLÉMY:
+{critical_issues_list}
+
+RYCHLÉ VYLEPŠENÍ (ROI do 30 dní):
+{quick_wins_list}
+
+LONG-TERM STRATEGIE:
+{strategic_improvements}
+
+Připravil jsem pro vás:
+✓ Kompletní video audit (5 min)
+✓ Mockup nového homepage
+✓ Kalkulace potenciálního ROI
+
+Pro podobného klienta ({case_study_name}) jsme během 60 dní dosáhli:
+• +52% konverze návštěvníků
+• +41% průměrná doba na stránce
+• +89% poptávek z webu
+
+Chcete vidět konkrétní řešení pro {company_name}?
+
+[Kalendář] nebo dejte vědět, kdy vám to vyhovuje.
+
+S pozdravem,
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: custom-demo
+PRIORITY: high
+FRAMEWORK: Gap Analysis + Demo
+SUBJECT: {company_name} vs konkurence - analýza
+
+Ahoj {first_name},
+
+porovnal jsem váš web s hlavní konkurencí v oboru {industry} a našel jsem pár zajímavých věcí.
+
+KONKURENCE VÁS PŘEVYŠUJE V:
+{competitive_gaps}
+
+VAŠE VÝHODY (které web nevyužívá):
+{untapped_strengths}
+
+Vytvořil jsem KONKRÉTNÍ DEMO redesign, který:
+1. Eliminuje competitive gaps
+2. Využívá vaše výhody
+3. Přidává modern features, které konkurence nemá
+
+{specific_custom_features}
+
+Estimated impact:
+• {estimated_conversion_increase}% více konverzí
+• {estimated_traffic_increase}% lepší SEO performance
+• {estimated_lead_increase} nových kvalifikovaných leadů měsíčně
+
+Ukážu vám to v 10min demo call?
+
+Díky,
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: follow-up
+SEQUENCE: 1
+DAYS_AFTER: 3
+SUBJECT: Re: {original_subject}
+
+Ahoj {first_name},
+
+jen rychlý follow-up k mému předchozímu emailu.
+
+Udělal jsem rychlý speed test vašeho webu - načítá se {load_time} sekund. Google doporučuje pod 2.5s.
+
+To znamená, že ztrácíte cca {estimated_bounce_percentage}% návštěvníků ještě než se web načte.
+
+Poslal bych vám screenshot + návrh, jak to vyřešit?
+
+Díky,
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: follow-up
+SEQUENCE: 2
+DAYS_AFTER: 7
+SUBJECT: Case study: {case_study_industry} - {result}
+
+Ahoj,
+
+vím, že jste zaneprázdněný, takže to bude krátké.
+
+Minulý týden jsem dokončil projekt pro klienta z podobného oboru jako {company_name}.
+
+Výsledky během 60 dní:
+• {metric_1}: {result_1}
+• {metric_2}: {result_2}
+• ROI: {roi_percentage}%
+
+Celý process + before/after screenshots: {case_study_link}
+
+Myslím, že podobné výsledky by fungovaly i pro {company_name}.
+
+Zajímá vás 10min call?
+
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: follow-up
+SEQUENCE: 3
+DAYS_AFTER: 12
+SUBJECT: Poslední pokus - {value_proposition}
+
+{first_name},
+
+tohle je můj poslední email, nechci vás spamovat.
+
+Ale ještě jednou - viděl jsem obrovský potenciál u {company_name} a chtěl bych pomoct.
+
+Připravil jsem pro vás:
+• {deliverable_1}
+• {deliverable_2}
+• {deliverable_3}
+
+Všechno zdarma, žádné závazky.
+
+Jestli máte zájem, dejte vědět. Pokud ne, žádný problém a přeju hodně úspěchů!
+
+{sender_name}
+
+P.S. Jestli tohle není pro vás relevantní, klidně mi to napište a odeberu vás z follow-upů.
+
+---TEMPLATE---
+CATEGORY: referral-based
+PRIORITY: high
+FRAMEWORK: Warm Introduction
+SUBJECT: {referral_name} mě doporučil
+
+Ahoj {first_name},
+
+{referral_name} z {referral_company} mě doporučil, abych vás kontaktoval.
+
+Dělali jsme pro ně redesign webu a během 4 měsíců viděli {referral_results}.
+
+{referral_name} zmínil, že {company_name} by mohla mít podobné potřeby.
+
+Rád bych vám ukázal, co jsme udělali pro {referral_company} a jak by to mohlo fungovat pro vás.
+
+Máte 15 minut tento týden?
+
+Díky,
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: ecommerce-specific
+PRIORITY: high
+FRAMEWORK: Revenue Focus
+SUBJECT: {company_name} - mobil konverze problém?
+
+Dobrý den,
+
+analyzoval jsem váš e-shop {website_url} a všiml jsem si, že mobilní verze má několik UX problémů.
+
+To je problém, protože:
+• 67% vašeho trafficu je z mobilu
+• Mobilní conversions jsou o {conversion_gap}% nižší než desktop
+• To vás stojí cca {lost_revenue} Kč měsíčně
+
+Udělal jsem pro podobný e-shop optimalizaci a výsledky:
+• +43% mobilní konverze
+• +27% průměrná hodnota objednávky
+• ROI 520% během 90 dní
+
+Připravil jsem DEMO mobilní redesign speciálně pro {company_name}.
+
+Chcete vidět?
+
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: local-business
+PRIORITY: medium
+FRAMEWORK: Local SEO + Design
+SUBJECT: {company_name} - lokální SEO příležitost
+
+Ahoj {first_name},
+
+hledal jsem "{local_search_keyword}" a {company_name} se neukázala v top 10.
+
+To je problém, protože lokální zákazníci hledají přesně to, co nabízíte - ale najdou konkurenci.
+
+Vytvořil jsem strategii, jak to vyřešit:
+1. Moderní web optimalizovaný pro lokální SEO
+2. Google Business integrace
+3. Conversion-focused design
+
+Pro klienta v {city} jsme za 3 měsíce dosáhli:
+• Pozice #2 pro klíčové keyword
+• +83% organického trafficu
+• +56% nových lokálních zákazníků
+
+Můžu vám ukázat konkrétní plán pro {company_name}?
+
+Díky,
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: urgency-based
+PRIORITY: medium
+FRAMEWORK: FOMO + Seasonal
+SUBJECT: Q1 2025 - web upgrade příležitost
+
+{first_name},
+
+většina firem v {industry} dělá redesign právě teď na začátku roku.
+
+Proč? Protože nový web = více leadů = lepší Q1 čísla.
+
+Aktuálně mám kapacitu pro 2 nové projekty v lednu. Pak až v březnu.
+
+Pro {company_name} by nový web znamenal:
+{specific_benefits}
+
+Timeline:
+• Kickoff: tento týden
+• Design mockups: 10 dní
+• Launch: do konce ledna
+
+Zajímá vás jeden z těch dvou slotů?
+
+{sender_name}
+
+P.S. Po lednu ceny půjdou nahoru o 20% kvůli vysoké poptávce.
+
+---TEMPLATE---
+CATEGORY: b2b-professional
+PRIORITY: high
+FRAMEWORK: Authority + Trust
+SUBJECT: Professional web redesign - {company_name}
+
+Dobrý den,
+
+pro B2B firmy jako {company_name} je web často první dojem pro potenciální klienty.
+
+Aktuální stav vašeho webu bohužel nevypadá jako lídr v oboru.
+
+Konkrétně:
+{professional_issues}
+
+Pro B2B klienty dělám weby, které:
+• Budují autoritu a důvěru
+• Qualifikují správné leads
+• Zkracují sales cycle
+
+Příklad: {b2b_case_study} - avg deal size +34%, sales cycle -40%.
+
+Připravil jsem koncept, jak by {company_name} mohla vypadat jako industry leader.
+
+10min call tento týden?
+
+S pozdravem,
+{sender_name}
+{sender_company}
+
+---TEMPLATE---
+CATEGORY: reactivation
+PRIORITY: low
+FRAMEWORK: Re-engagement
+SUBJECT: Stále aktuální pro {company_name}?
+
+Ahoj {first_name},
+
+kontaktoval jsem vás před pár měsíci ohledně redesignu webu.
+
+Chápu, že timing nebyl ideální.
+
+Jen chci dát vědět, že nabídka stále platí:
+• Kompletní web audit zdarma
+• Mockup nového designu
+• ROI kalkulace
+
+Od našeho posledního kontaktu jsem dokončil {new_case_count} projektů s průměrným ROI {avg_roi}%.
+
+Jestli je teď lepší čas, rád se ozvu.
+
+Dává to smysl?
+
+{sender_name}
+
+---TEMPLATE---
+CATEGORY: seasonal-holiday
+PRIORITY: medium
+FRAMEWORK: Seasonal Opportunity
+SUBJECT: Připravený na sezónu 2025?
+
+Ahoj,
+
+blíží se hlavní sezóna pro {industry} a váš web by měl být ready.
+
+Aktuální problémy, které vidím:
+{seasonal_specific_issues}
+
+To vás bude stát zákazníky v peak sezóně.
+
+Stihli bychom redesign do {deadline}:
+• Week 1-2: Design + copywriting
+• Week 3: Development
+• Week 4: Testing + launch
+
+Výsledek: Web ready na vysoký traffic a maximální konverze.
+
+Startujeme?
+
+{sender_name}
+
+P.S. Poslední rok jsem dělal podobný rush projekt - launch za 3 týdny a klient měl +67% konverze během sezóny.
