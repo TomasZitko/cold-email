@@ -10,8 +10,19 @@ from typing import Dict, List, Optional
 load_dotenv()
 
 class EmailGenerator:
-    def __init__(self, leads_file='data/qualified-leads.csv', templates_file='data/email-templates.txt', output_file='data/emails-to-send.json'):
-        self.leads_file = leads_file
+    def __init__(
+        self,
+        leads_files=None,  # Can accept list of files or single file
+        templates_file='data/email-templates.txt',
+        output_file='data/emails-to-send.json'
+    ):
+        # Default to processing HIGH and MEDIUM priority leads
+        if leads_files is None:
+            leads_files = ['data/HIGH_PRIORITY_LEADS.csv', 'data/MEDIUM_PRIORITY_LEADS.csv']
+        elif isinstance(leads_files, str):
+            leads_files = [leads_files]
+
+        self.leads_files = leads_files
         self.templates_file = templates_file
         self.output_file = output_file
         self.openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -97,17 +108,18 @@ class EmailGenerator:
 
     def _extract_lead_insights(self, lead: Dict) -> Dict:
         """Extract actionable sales insights from lead data"""
+        # Map filter_leads_v2.py column names to expected format
         insights = {
-            'company_name': lead.get('name', 'Vaše firma'),
-            'first_name': lead.get('name', '').split()[0] if lead.get('name') else 'kolego',
-            'website_url': lead.get('website_url', ''),
-            'industry': lead.get('business_category', 'váš obor'),
+            'company_name': lead.get('company_name', 'Vaše firma'),  # Changed from 'name'
+            'first_name': lead.get('company_name', '').split()[0] if lead.get('company_name') else 'kolego',
+            'website_url': lead.get('website', ''),  # Changed from 'website_url'
+            'industry': lead.get('industry', 'váš obor'),  # Changed from 'business_category'
             'score': lead.get('score', 50),
-            'priority': lead.get('priority', 'MEDIUM'),
+            'priority': lead.get('priority', 'Medium').upper(),  # Normalize to uppercase
         }
 
         # Parse issues found on website
-        issues_raw = lead.get('issues', '')
+        issues_raw = lead.get('website_issues', '')  # Changed from 'issues'
         if issues_raw and issues_raw != 'None':
             insights['has_issues'] = True
             insights['issues'] = issues_raw
@@ -200,26 +212,41 @@ CRITICAL: Make this email feel like it was written specifically for {insights['c
             print("❌ No templates loaded. Cannot proceed.")
             return
 
-        try:
-            df = pd.read_csv(self.leads_file)
-        except FileNotFoundError:
-            print(f"❌ Leads file '{self.leads_file}' not found.")
-            return
+        # Process multiple lead files
+        all_leads = []
+        all_dfs = []
 
-        # Filter for leads that need an email
-        new_leads = df[df['status'] == 'new'].to_dict('records')
-        if not new_leads:
+        for leads_file in self.leads_files:
+            try:
+                df = pd.read_csv(leads_file)
+                print(f"✅ Loaded {len(df)} leads from {leads_file}")
+
+                # Add status column if it doesn't exist (for compatibility with filter_leads_v2.py)
+                if 'status' not in df.columns:
+                    df['status'] = 'new'
+
+                # Add source file for tracking
+                df['source_file'] = leads_file
+
+                all_dfs.append(df)
+                all_leads.extend(df[df['status'] == 'new'].to_dict('records'))
+
+            except FileNotFoundError:
+                print(f"⚠️  Leads file '{leads_file}' not found. Skipping.")
+                continue
+
+        if not all_leads:
             print("ℹ️  No new leads to generate emails for.")
             return
 
-        print(f"📊 Found {len(new_leads)} new leads to process\n")
+        print(f"\n📊 Found {len(all_leads)} total new leads to process\n")
         generated_emails = []
         success_count = 0
         failed_count = 0
 
-        for idx, lead in enumerate(new_leads, 1):
-            company_name = lead.get('name', 'Unknown')
-            print(f"[{idx}/{len(new_leads)}] 📧 Processing: {company_name}")
+        for idx, lead in enumerate(all_leads, 1):
+            company_name = lead.get('company_name', 'Unknown')  # Changed from 'name'
+            print(f"[{idx}/{len(all_leads)}] 📧 Processing: {company_name}")
 
             # Select best template for this lead
             template = self._select_template(lead)
@@ -236,7 +263,7 @@ CRITICAL: Make this email feel like it was written specifically for {insights['c
 
             try:
                 response = self.openai_client.chat.completions.create(
-                    model="gpt-4-turbo",
+                    model="gpt-4-turbo-preview",  # Fixed: use valid model name
                     response_format={"type": "json_object"},
                     messages=[
                         {
@@ -258,9 +285,9 @@ CRITICAL: Make this email feel like it was written specifically for {insights['c
                 body_with_signature = email_content['body'] + f"\n\n{self.sender_name}\n{self.sender_company}"
 
                 generated_emails.append({
-                    "to_email": lead.get('contact_email', ''),
+                    "to_email": lead.get('email', ''),  # Changed from 'contact_email'
                     "company_name": company_name,
-                    "website_url": lead.get('website_url', ''),
+                    "website_url": lead.get('website', ''),  # Changed from 'website_url'
                     "priority": insights['priority'],
                     "score": insights['score'],
                     "subject": email_content['subject'],
@@ -269,8 +296,13 @@ CRITICAL: Make this email feel like it was written specifically for {insights['c
                     "framework": template.get('framework', 'generic')
                 })
 
-                # Mark as processed
-                df.loc[df['website_url'] == lead['website_url'], 'status'] = 'email_generated'
+                # Mark as processed - find the dataframe this lead came from
+                source_file = lead.get('source_file')
+                for df in all_dfs:
+                    if df['source_file'].iloc[0] == source_file:
+                        df.loc[df['company_name'] == lead['company_name'], 'status'] = 'email_generated'
+                        break
+
                 success_count += 1
                 print(f"   ✅ Email generated ({template['category']} - {template.get('framework', 'generic')})")
 
@@ -284,12 +316,16 @@ CRITICAL: Make this email feel like it was written specifically for {insights['c
                 json.dump(generated_emails, f, indent=4, ensure_ascii=False)
             print(f"\n✅ SUCCESS: Saved {len(generated_emails)} emails to '{self.output_file}'")
 
-        # Save updated lead statuses
-        df.to_csv(self.leads_file, index=False)
-        print(f"✅ Updated lead statuses in '{self.leads_file}'")
+        # Save updated lead statuses back to their source files
+        for df in all_dfs:
+            source_file = df['source_file'].iloc[0]
+            # Remove the source_file column before saving
+            df.drop(columns=['source_file'], inplace=True)
+            df.to_csv(source_file, index=False)
+            print(f"✅ Updated lead statuses in '{source_file}'")
 
         # Summary
         print(f"\n=== 📊 GENERATION SUMMARY ===")
         print(f"✅ Successful: {success_count}")
         print(f"❌ Failed: {failed_count}")
-        print(f"📈 Success Rate: {(success_count / len(new_leads) * 100):.1f}%")
+        print(f"📈 Success Rate: {(success_count / len(all_leads) * 100):.1f}%")

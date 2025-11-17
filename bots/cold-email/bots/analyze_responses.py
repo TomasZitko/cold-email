@@ -28,20 +28,42 @@ class ResponseAnalyzer:
 
     def __init__(
         self,
-        qualified_leads_file='data/qualified-leads.csv',
+        qualified_leads_files=None,  # Can accept list of files or single file
         responses_file='data/responses.json',
         sent_log_file='data/sent_log.txt'
     ):
-        self.leads_file = qualified_leads_file
+        # Default to checking all priority lead files
+        if qualified_leads_files is None:
+            qualified_leads_files = [
+                'data/HIGH_PRIORITY_LEADS.csv',
+                'data/MEDIUM_PRIORITY_LEADS.csv',
+                'data/LOW_PRIORITY_LEADS.csv'
+            ]
+        elif isinstance(qualified_leads_files, str):
+            qualified_leads_files = [qualified_leads_files]
+
+        self.leads_files = qualified_leads_files
         self.responses_file = responses_file
         self.sent_log_file = sent_log_file
 
-        # Load leads
-        try:
-            self.leads_df = pd.read_csv(qualified_leads_file)
-        except FileNotFoundError:
-            print(f"⚠️  Warning: Leads file '{qualified_leads_file}' not found.")
+        # Load leads from all files
+        all_leads_dfs = []
+        for leads_file in qualified_leads_files:
+            try:
+                df = pd.read_csv(leads_file)
+                all_leads_dfs.append(df)
+            except FileNotFoundError:
+                continue
+
+        if all_leads_dfs:
+            self.leads_df = pd.concat(all_leads_dfs, ignore_index=True)
+            print(f"✅ Loaded {len(self.leads_df)} total leads from {len(all_leads_dfs)} file(s)")
+        else:
+            print(f"⚠️  Warning: No leads files found.")
             self.leads_df = pd.DataFrame()
+
+        # Store the first file for saving updates (we'll update all files later if needed)
+        self.leads_file = qualified_leads_files[0] if qualified_leads_files else 'data/leads.csv'
 
         # Notion integration (optional)
         self.notion = None
@@ -167,12 +189,13 @@ class ResponseAnalyzer:
                 msg = email.message_from_bytes(data[0][1])
                 from_address = email.utils.parseaddr(msg['From'])[1]
 
-                # Check if sender is one of our leads
-                if self.leads_df.empty or from_address not in self.leads_df['contact_email'].values:
+                # Check if sender is one of our leads (use 'email' column from filter_leads_v2.py)
+                email_col = 'email' if 'email' in self.leads_df.columns else 'contact_email'
+                if self.leads_df.empty or from_address not in self.leads_df[email_col].values:
                     continue
 
                 # Get lead info
-                lead_info = self.leads_df[self.leads_df['contact_email'] == from_address].iloc[0]
+                lead_info = self.leads_df[self.leads_df[email_col] == from_address].iloc[0]
 
                 # Extract email content
                 subject = msg.get('subject', '')
@@ -182,17 +205,17 @@ class ResponseAnalyzer:
                 full_text = f"{subject} {body}"
                 classification, confidence = self._classify_response(full_text)
 
-                # Create response record
+                # Create response record (use correct column names from filter_leads_v2.py)
                 response_data = {
                     'timestamp': datetime.now().isoformat(),
                     'from_email': from_address,
-                    'company_name': lead_info.get('name', 'Unknown'),
-                    'website_url': lead_info.get('website_url', ''),
+                    'company_name': lead_info.get('company_name', 'Unknown'),  # Changed from 'name'
+                    'website_url': lead_info.get('website', ''),  # Changed from 'website_url'
                     'subject': subject,
                     'body_preview': body[:200] + '...' if len(body) > 200 else body,
                     'classification': classification,
                     'confidence': confidence,
-                    'priority': lead_info.get('priority', 'MEDIUM'),
+                    'priority': lead_info.get('priority', 'Medium').upper(),  # Normalize to uppercase
                     'score': lead_info.get('score', 0)
                 }
 
@@ -262,7 +285,14 @@ class ResponseAnalyzer:
         }
 
         if not self.leads_df.empty:
-            self.leads_df.loc[self.leads_df['contact_email'] == email, 'status'] = status_map.get(classification, 'replied')
+            # Use correct email column name
+            email_col = 'email' if 'email' in self.leads_df.columns else 'contact_email'
+
+            # Add status column if it doesn't exist
+            if 'status' not in self.leads_df.columns:
+                self.leads_df['status'] = 'email_sent'
+
+            self.leads_df.loc[self.leads_df[email_col] == email, 'status'] = status_map.get(classification, 'replied')
             self.leads_df.to_csv(self.leads_file, index=False)
 
     def _add_to_notion(self, lead_info: pd.Series, response_data: Dict):
@@ -271,12 +301,16 @@ class ResponseAnalyzer:
             return
 
         try:
+            # Use correct column names from filter_leads_v2.py
+            website = lead_info.get('website', '')
+            email_val = lead_info.get('email', lead_info.get('contact_email', ''))
+
             self.notion.pages.create(
                 parent={"database_id": self.database_id},
                 properties={
-                    "Name": {"title": [{"text": {"content": lead_info.get('name', 'Unknown')}}]},
-                    "Website": {"url": lead_info.get('website_url', '')},
-                    "Email": {"email": lead_info.get('contact_email', '')},
+                    "Name": {"title": [{"text": {"content": lead_info.get('company_name', 'Unknown')}}]},
+                    "Website": {"url": website if website else "https://example.com"},  # Notion requires valid URL
+                    "Email": {"email": email_val if email_val else "placeholder@example.com"},  # Notion requires valid email
                     "Status": {"select": {"name": "Positive Reply"}},
                     "Confidence": {"number": response_data['confidence']},
                     "Response": {"rich_text": [{"text": {"content": response_data['body_preview']}}]}
